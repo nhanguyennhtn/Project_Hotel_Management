@@ -1,0 +1,16 @@
+.card {
+    .home-card-desc {
+        .qill {
+            height: auto;
+
+            .ql-editor {
+                overflow: hidden;
+                display: -webkit-box;
+                -webkit-line-clamp: 3;
+                line-clamp: 3 !important;
+                -webkit-box-orient: vertical;
+                font-size: medium;
+            }
+        }
+    }
+}

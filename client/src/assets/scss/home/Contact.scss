@@ -1,0 +1,15 @@
+.home-wrapper {
+    padding-top: 56px;
+    .contact-card {
+        height: 50vh;
+
+    }
+    .row{
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            padding: 2px;
+        }
+    }
+}

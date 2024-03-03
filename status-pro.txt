@@ -1,0 +1,11 @@
+﻿status-user(true):Người dùng đã thực hiện ký hợp đồng(trạng thái đang hoạt động)
+status-user(false): Người dùng đã ký hợp đồng  và đã ngưng hợp đồng(trạng thái ngưng hoạt động)
+status-user(null): Người dùng đăng ký phòng và chưa ký kết hợp đồng(Bảo trì)
+
+status-motel(true): Phòng đã được ký kết hợp đồng (Đã được đặt)
+status-motel(false): Phòng đã được đăng  ký và chưa hoàn thành ký kết hợp đồng(chờ phản hồi)
+status-motel(null): Phòng chưa được đặc hoặc phòng đã ngưng ký kết hợp đồng (Phòng trống)
+
+status-contract(true): Hợp đồng đã được ký kết giữa hai phía (Đang hoạt động)
+status-contract(false): Hợp đồng đã ngưng ký kết giữa hai bên(Ngưng hoạt động)
+status-contract(null): Hợp đồng đã được tạo và đang chờ xác nhận từ khách hàng (chờ xác nhận)

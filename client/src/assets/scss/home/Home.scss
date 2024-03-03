@@ -1,0 +1,40 @@
+.home-wrapper {
+    .carousel-item img {
+        width: 100%;
+        height: 40vh;
+        object-fit: cover;
+    }
+
+    .card {
+
+        // border-color: aquamarine;
+        .home-card-desc {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+
+        }
+        .ql-editor {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+            font-size: medium;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+
+}
+
+#height {
+    height: auto;
+}

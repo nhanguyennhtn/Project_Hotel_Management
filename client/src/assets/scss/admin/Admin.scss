@@ -1,0 +1,35 @@
+.admin-wrapper {
+    img {
+        width: 200px;
+        height: 100px;
+        object-fit: cover;
+    }
+
+
+    .ql-editor {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        font-size: medium;
+    }
+
+    .home-card-desc {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
+
+    .contain-with {
+        width: 70%;
+    }
+
+    .show-contain {
+        display: none;
+    }
+
+
+}

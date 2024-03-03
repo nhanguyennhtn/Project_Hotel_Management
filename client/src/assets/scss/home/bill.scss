@@ -1,0 +1,38 @@
+.profile-content {
+    align-items: center;
+    margin-left: 30%;
+    outline: 1px solid;
+    border-radius: 5px;
+    // background-color: blanchedalmond;
+
+    max-width: 600px;
+    height: 50vh;
+
+    .profile-item {
+        margin-left: 40px;
+        text-align: left;
+        font-weight: 600;
+    }
+
+    font-size: 18px;
+    background-color: rgb(209, 209, 209);
+}
+
+.h-container {
+    .h-card {
+        height: 60vh;
+        justify-content: center;
+        // justify-items: center;
+        align-items: center;
+        .card-width {
+            max-width: 60%;
+            // background-color: darkgray;
+            // width: 640px;
+            // height: auto;
+            
+            
+        }
+    }
+
+}
+
