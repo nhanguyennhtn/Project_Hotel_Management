@@ -3,6 +3,11 @@
     justify-content: center;
     justify-items: center;
 
+    .map_info {
+        min-height: 350px;
+        border: 0;
+    }
+
     .card {
         // max-width: 640px;
 
@@ -117,7 +122,8 @@
     }
 
 }
-.img-QR{
+
+.img-QR {
     width: 20%;
     height: auto;
 }

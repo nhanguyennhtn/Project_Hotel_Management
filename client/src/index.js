@@ -24,6 +24,7 @@ import CustomerDetail from './page/admin/customers/customerDetail.js'
 import CancelRoom from './page/admin/room/Cancel.js'
 import ContractDetail from './page/admin/contracts/contractDetail.js'
 import Expense from './page/admin/expenses/index.js'
+import ExpenseCreate from './page/admin/expenses/create.js'
 import Contact from './page//admin/contacts/index.js';
 import AdminBill from './page//admin/bill/ListBill.js';
 
@@ -69,6 +70,9 @@ root.render(
         <Route path='/admin/expense' element={
           JSON.parse(window.sessionStorage.getItem('userInfo'))?.username === 'nhanguyen'
             ? <Expense /> : <Login />} />
+          <Route path='/admin/expense/create' element={
+            JSON.parse(window.sessionStorage.getItem('userInfo'))?.username === 'nhanguyen'
+              ? <ExpenseCreate /> : <Login />} />
         <Route path='/admin/contact' element={
           JSON.parse(window.sessionStorage.getItem('userInfo'))?.username === 'nhanguyen'
             ? <Contact /> : <Login />} />

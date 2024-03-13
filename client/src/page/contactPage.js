@@ -16,7 +16,7 @@ export default function Contact() {
     async function test(e) {
         e.preventDefault()
         const data = { fullname: fullname, phone: phone, desc: mess, ngay: today.toLocaleDateString("vi-VN", options) }
-        await apiContactCreate({...data, username: accountinfo._id} )
+        await apiContactCreate({ ...data, username: accountinfo._id })
         alert('Đã ghi nhận phản hồi')
         console.log(data, '--------------');
 
@@ -26,8 +26,13 @@ export default function Contact() {
             <Header />
             <div className='container-md my-4'>
                 <div className='row'>
+
                     <div className='container-md my-3 col-6 contact-card '>
-                        <img src={image5} alt='' />
+                        <iframe class="position-relative rounded w-100 h-100 map_info"
+                            src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15676.733646510674!2d105.7736131!3d10.0346448!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a08919f8927df5%3A0x28c8fc7a8cc25dc7!2zTkhBzIAgVFJPzKMgU0lOSCBWScOKTiAyMTgvMTdCIFRIxJAgQ8OCzIBOIFRIxqA!5e0!3m2!1svi-VN!2sus!4v1647148616358!5m2!1svi-VN!2sus"
+                            frameborder="0" allowfullscreen="" aria-hidden="false"
+                            tabindex="0"></iframe>
+                        {/* <img src={image5} alt='' /> */}
                         <i class="bi bi-geo-alt"> 91/15, Đường 30/4, Quận Ninh Kiều, Tp Cần Thơ, Hưng Lợi, Ninh Kiều, Cần Thơ</i>
                     </div >
                     <form onSubmit={e => test(e)} className='form col-5  mx-auto contact-form-w' >

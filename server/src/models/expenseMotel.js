@@ -3,6 +3,8 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 const Expense = new Schema({
+    contract: {type: mongoose.Schema.ObjectId, ref: 'Contract'},
+    room: {type: mongoose.Schema.ObjectId, ref: 'Motel'},
     costOfElectricity: { type: Number },
     costOfWater: { type: Number },
     electric: {type: String},

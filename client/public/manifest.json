@@ -9,13 +9,13 @@
     },
     {
       "src": "",
-      "type": "image/png",
+      "type": "image/webp",
       "sizes": "192x192"
     },
     {
       "src": "",
-      "type": "image/png",
-      "sizes": "512x512"
+      "type": "image/webp",
+      "sizes": "512x512"  
     }
   ],
   "start_url": ".",

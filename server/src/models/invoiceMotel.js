@@ -4,7 +4,8 @@ const Schema = mongoose.Schema
 
 const Invoice = new Schema({
     expense: { type: mongoose.Schema.ObjectId, ref: 'Expense' },
-    username: { type: mongoose.Schema.ObjectId, ref: 'Contract'},
+    contract: { type: mongoose.Schema.ObjectId, ref: 'Contract'},
+    user: { type: mongoose.Schema.ObjectId, ref: 'User'},
     other: { type: Number },
     price: {type: Number},
     date: { type: String },

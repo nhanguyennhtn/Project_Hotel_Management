@@ -3,15 +3,16 @@ import FileBase64 from 'react-file-base64'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import AdminHeader from '../components/Header'
-import { apiMotelsRead, apiMotelsDelete, apiMotelsCreate, apiExpensesRead, apiExpensesCreate, apiExpensesDelete } from '../../../axios/axios'
+import { apiMotelsRead, apiExpensesRead, apiExpensesCreate, apiExpensesDelete } from '../../../axios/axios'
 import '../../../assets/scss/admin/Admin.scss'
-
-import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css';
+
+import Detail from '../components/expense/Detail'
 
 export default function Admin() {
     const [expenses, setExpenses] = useState([])
-    const { register: registerCreate, handleSubmit: handleSubmitCreate } = useForm()
+    const [rooms, setRooms] = useState([])
+    // const { register: registerCreate, handleSubmit: handleSubmitCreate } = useForm()
     const createRef = useRef()
 
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -24,8 +25,11 @@ export default function Admin() {
 
     const fetchData = async () => {
         const res = await apiExpensesRead()
+        const result = await apiMotelsRead()
+        setRooms(result.motels)
         setExpenses(res.expenses)
     }
+    console.log(expenses, 'ùuesf');
 
     const handleCreate = async (data, e) => {
         try {
@@ -41,18 +45,58 @@ export default function Admin() {
     }
 
     const deleteProduct = async id => {
-        if (window.confirm("Delete")) {
+        if (true) {
             await apiExpensesDelete(id)
             fetchData()
         }
+    }
+    const submitDetail = () => {
+
     }
 
     return (
         <div>
             <AdminHeader />
-            <div className='admin-wrapper container-md mt-4'>
-                <button ref={createRef} className="btn btn-outline-primary mb-4" data-bs-toggle="modal" data-bs-target="#createMotal">Create</button>
-                <div className="modal fade" id="createMotal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="createMotalLabel" aria-hidden="true">
+
+            <div className='admin-wrapper mx-4 mt-4'>
+                <div className='row'>
+                    <div className='card'>
+                        <div className='table-expense'>
+                            <table className='table table-bordered'>
+                                <thead>
+                                    {/* <th scope="col">#</th> */}
+                                    {rooms.map((item) => {
+                                        return (
+                                            <th>
+                                                {item.title}
+                                            </th>
+                                        )
+                                    })}
+                                </thead>
+                                <tbody>
+                                    {rooms?.map((item) => {
+                                        return (
+                                            <td><Link to={'/admin/expense/create'} state={item} className='btn '>Create</Link></td>
+                                        )
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div className='row '>
+                    <div className='card container-md '>
+                        <div className='card-body text-center'>
+                            <button className='p-2 mx-2 border-1 rounded col-1'>Hiện bảng</button>
+                            <button className='p-2 mx-2 border-1 rounded col-1' onClick={submitDetail()}>Hiện hóa đơn</button>
+                            <button className='p-2 mx-2 border-1 rounded col-1'>Date</button>
+                        </div>
+                    </div>
+                </div>
+                {/* <button ref={createRef} className="btn btn-outline-primary mb-4" data-bs-toggle="modal" data-bs-target="#createMotal">Create</button> */}
+
+                {/* <div className="modal fade" id="createMotal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="createMotalLabel" aria-hidden="true">
                     <div className="modal-dialog modal-dialog-centered">
                         <div className="modal-content">
                             <form onSubmit={handleSubmitCreate(handleCreate)}>
@@ -85,8 +129,9 @@ export default function Admin() {
                             </form>
                         </div>
                     </div>
-                </div>
-                <table className="table table-bordered">
+                </div> */}
+                {Detail()}
+                <table className="table table-bordered mt-4">
                     <thead>
                         <tr>
                             <th scope="col">#</th>
@@ -95,6 +140,7 @@ export default function Admin() {
                             <th>Điện</th>
                             <th>Nước</th>
                             <th>Ngày</th>
+                            <th></th>
                             <th></th>
                         </tr>
                     </thead>
@@ -107,16 +153,16 @@ export default function Admin() {
                                 <td>{item.electric}</td>
                                 <td>{item.Water}</td>
                                 <td>{item.date}</td>
-                                {/* <td>
+                                <td>
                                     <Link to='/admin/update' state={item} className="btn btn-outline-warning">Chỉnh sửa</Link>
-                                </td> */}
+                                </td>
                                 <td>
                                     <button className="btn btn-outline-danger" onClick={() => deleteProduct(item._id)}>Xoá</button>
                                 </td>
                             </tr>
                         ) :
                             <tr>
-                                <td colSpan='6'>Không có dữ liệu</td>
+                                <td colSpan='7'>Không có dữ liệu</td>
                             </tr>
                         }
                     </tbody>
