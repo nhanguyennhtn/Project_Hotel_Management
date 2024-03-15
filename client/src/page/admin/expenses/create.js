@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { apiContractsRead, apiExpensesCreate, apiExpensesRead } from '../../../axios/axios'
+import ReactQuill from 'react-quill'
 import Header from '../components/Header'
 import { useForm } from 'react-hook-form'
 function Create() {
     const motel = useLocation().state
     const { register: registerCreate, handleSubmit: handleSubmitCreate } = useForm()
     const [contractvalue, setContracts] = useState([])
+    const [value, setValue] = useState('')
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -16,7 +18,6 @@ function Create() {
     const fetchData = async () => {
         const res = await apiContractsRead()
         setContracts(res.contracts)
-        console.log(contractvalue);
 
     }
     const ngay = () => {
@@ -28,12 +29,12 @@ function Create() {
     const handleCreate = async (data, e) => {
         // e.preventDefault()   
         try {
-            const res = await apiExpensesCreate({ ...data, room: motel._id, contract: data._id, date: ngay() })
-            
-                alert('Thành công')
-                e.target.reset()
-                fetchData()
-                navigate('/admin/expense')
+            const res = await apiExpensesCreate({ ...data, room: motel._id, desc: value, date: ngay() })
+            alert('Thành công')
+            e.target.reset()
+            fetchData()
+            setValue()
+            // navigate('/admin/expense')
         } catch (e) {
             console.log(e)
         }
@@ -57,19 +58,24 @@ function Create() {
                             <div className="modal-body fw-bold ">
                                 <div className="mb-3">
                                     <label htmlFor="titleCreate" className="form-label mx-3 ">Giá điện</label>
-                                    <input required {...registerCreate('costOfElectricity')} type="number" className="form-control" id="titleCreate" placeholder="costOfElectricity" />
+                                    <input autoComplete='off' required {...registerCreate('costOfElectricity')} type="number" className="form-control" id="titleCreate" placeholder="costOfElectricity" />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="costOfWater" className="form-label mx-3">Giá nước</label>
-                                    <input required {...registerCreate('costOfWater')} type="number" className="form-control " id="costOfWater" placeholder="costOfWater" />
+                                    <input autoComplete='off' required {...registerCreate('costOfWater')} type="number" className="form-control " id="costOfWater" placeholder="costOfWater" />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="electric" className="form-label mx-3">Điện</label>
-                                    <input required {...registerCreate('electric')} type="text" className="form-control " id="electric" placeholder="electric" />
+                                    <input autoComplete='off' required {...registerCreate('electric')} type="number" className="form-control " id="electric" placeholder="electric" />
                                 </div>
                                 <div className="mb-3">
                                     <label htmlFor="sizeCreate" className="form-label mx-3">Nước</label>
-                                    <input required {...registerCreate('Water')} type="text" className="form-control " id="sizeCreate" placeholder="Water" />
+                                    <input autoComplete='off' required {...registerCreate('Water')} type="number" className="form-control " id="sizeCreate" placeholder="Water" />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="sizeCreate" className="form-label mx-3">Khác</label>
+                                    <input autoComplete='off'  {...registerCreate('Other')} defaultValue='0' type="number" className="form-control " id="sizeCreate" placeholder="Số tiền" />
+                                    <ReactQuill theme="snow" value={value} onChange={setValue} placeholder='nhập nội dung' />
                                 </div>
                             </div>
                             <div className="modal-footer my-2 gap-2">
@@ -110,6 +116,8 @@ function Create() {
                                     <p>- Giá nước: Mức giá nước hiện tại được tính trên đơn vị đồng/khối.</p>
                                     <p>- Điện: Mức điện tiêu thụ của tháng hiện tại đơn vị kWh.</p>
                                     <p>- Nước: Lượng nước tiêu thụ của tháng hiện tại  đơn vị khối.</p>
+                                    <p>- Khác: Tổng các chi phí, phụ phí phát sinh (nếu có)</p>
+                                    <p>- Nội dung: Tên chi tiết các chí phí, phụ phí (nếu có)</p>
                                 </div>
                             </div>
                         </div>

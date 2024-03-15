@@ -3,7 +3,6 @@ import Header from '../components/Header'
 import Footer from '../components/Footer'
 import { apiContactCreate } from '../axios/axios'
 import '../assets/scss/home/Contact.scss'
-import { image5 } from '../assets/img/panner'
 export default function Contact() {
     const accountinfo = JSON.parse(window.sessionStorage.getItem('userInfo'))
     var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -38,7 +37,6 @@ export default function Contact() {
                     <form onSubmit={e => test(e)} className='form col-5  mx-auto contact-form-w' >
                         <div className='card-body my-4 d-flex align-items-center'>
                             <h5>Thông tin Phản hồi</h5>
-                            <i class="bi bi-geo-alt"></i>
                         </div>
                         <div class="mb-3">
                             <label for="fullname" class="form-label">Họ và Tên</label>

@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from "react-router-dom";
 
 export default function Header() {
     const handleLogout = () => {
@@ -11,29 +12,29 @@ export default function Header() {
     return (
         <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-md">
-                <a class="navbar-brand" href="/admin">Trang chủ</a>
+                <Link class="navbar-brand" to="/admin">Trang chủ</Link>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="/admin/customers">Khách hàng</a>
+                            <Link class="nav-link active" aria-current="page" to="/admin/customers">Khách hàng</Link>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/admin/room">Phòng</a>
+                            <Link class="nav-link" to="/admin/room">Phòng</Link>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/admin/bill">Hóa đơn</a>
+                            <Link class="nav-link" to="/admin/bill">Hóa đơn</Link>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link " href="/admin/response" >Phản hồi</a>
+                            <Link class="nav-link " to="/admin/response" >Phản hồi</Link>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link " href="/admin/expense" >Điện nước</a>
+                            <Link class="nav-link " to="/admin/expense" >Điện nước</Link>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link " href="/admin/contact" >Phản hồi</a>
+                            <Link class="nav-link " to="/admin/contact" >Phản hồi</Link>
                         </li>
                     </ul>
                     <div className='btn btn-outline-danger' onClick={handleLogout}>

@@ -9,6 +9,8 @@ const expenseController = {
 
     read: (req, res, next) => {
         model.find()
+            .populate('contract')
+            .populate('room')
             .then(expenses => res.json({ expenses }))
             .catch(next)
     },
