@@ -101,3 +101,31 @@ export const apiExpensesUpdate = data =>
 
 export const apiExpensesDelete = id =>
     axiosClient.delete('/api/expenses/delete/' + id)
+
+//News
+export const apiNewsCreate = data =>
+    axiosClient.post('/api/news/create', data)
+
+export const apiNewsRead = () =>
+    axiosClient.get('/api/news/read')
+
+export const apiNewsReadUsername = username =>
+    axiosClient.get('/api/news/readUsername/' + username)
+
+export const apiNewsUpdate = data =>
+    axiosClient.put(`/api/news/update/${data._id}`, data)
+
+export const apiNewsDelete = id =>
+    axiosClient.delete('/api/news/delete/' + id)
+//Img
+export const apiReviewsCreate = data =>
+    axiosClient.post('/api/reviews/create', data)
+
+export const apiReviewsRead = () =>
+    axiosClient.get('/api/reviews/read')
+
+export const apiReviewsUpdate = data =>
+    axiosClient.put(`/api/reviews/update/${data._id}`, data)
+
+export const apiReviewsDelete = id =>
+    axiosClient.delete('/api/reviews/delete/' + id)

@@ -6,6 +6,7 @@ import image44 from '../chuyenkhoan.jpg'
 import image55 from '../ggmap.jpg'
 import image66 from '../logo-dangky.png'
 import image77 from '../avatar.png'
+import image066 from '../anh06.jpg'
 
 export const image0 = image00
 export const image1 = image11
@@ -15,3 +16,4 @@ export const image4 = image44
 export const image5 = image55
 export const image6 = image66
 export const image7 = image77
+export const image06 = image066

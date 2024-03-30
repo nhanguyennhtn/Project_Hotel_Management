@@ -16,6 +16,7 @@ export default function Table() {
         const result = await apiContractsRead()
         setExpenses(res.expenses)
         setContracts(res.contracts)
+        console.log(res);
     }
 
     const deleteProduct = async id => {
@@ -26,7 +27,7 @@ export default function Table() {
     }
     const submitProduct = async (item) => {
         if (window.confirm('Xác nhận thành công')) {
-            await apiExpensesUpdate({ id: item._id, status: true })
+            await apiExpensesUpdate({ _id: item._id, status: true })
             fetchData()
 
         }

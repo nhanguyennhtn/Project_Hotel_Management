@@ -4,6 +4,8 @@ const userRoute = require("./userRoute")
 const contractRoute = require("./contractRoute")
 const contactRoute = require("./contactRoute")
 const expenseRoute = require("./expenseRoute")
+const newPageRoute = require("./newsRoute")
+const reviewRoute = require("./reviewRoute")
 
 const routes = app => {
     accountRoute(app),
@@ -11,7 +13,9 @@ const routes = app => {
     userRoute(app),
     contactRoute(app),
     contractRoute(app),
-    expenseRoute(app)
+    expenseRoute(app),
+    reviewRoute(app),
+    newPageRoute(app)
 }
 
 module.exports = routes

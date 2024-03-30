@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
-import { apiContactRead, apiContractsRead, apiExpensesRead } from "../../../../axios/axios"
+import { apiContractsRead, apiExpensesRead } from "../../../../axios/axios"
+import '../../../../assets/scss/admin/Bill.scss'
 
 
 export default function Detail() {
     const [expenses, setExxpenses] = useState([])
     const [contracts, setContracts] = useState([])
-    // const [userActives, setUserAtives] = useState([])
 
     useEffect(() => {
         fetchData()
@@ -46,16 +46,16 @@ export default function Detail() {
     }
 
     return (
-        <div className="card container-md my-4">
-            <div className="card row shadow">
+        <div className=" container-md my-4">
+            <div className=" row ">
                 <div className="col">
                     <div class="container-xxl py-5">
                         <div class="container">
-                            <div class="row g-4">
+                            <div class="row g-4 ">
                                 {expenses.length > 0 ? expenses.map((item) => {
                                     return (
-                                        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                                            <div class="room-item shadow rounded overflow-hidden">
+                                        <div class="col-lg-4 col-md-4 wow fadeInUp" data-wow-delay="0.1s">
+                                            <div class="room-item card rounded overflow-hidden max-heigth-listbill">
                                                 <div class="px-4 mt-2">
                                                     <div class="d-flex justify-content-between mb-3">
                                                         <h5 class="mb-0">Hóa đơn</h5>
@@ -68,7 +68,7 @@ export default function Detail() {
                                                         <small class="border-end me-3 pe-1" >{userActive(item.room._id)}</small>
                                                         <small class=" me-3 pe-3" >{item.status === true ? 'Đã đóng' : <div className="text-primary">Chưa đóng</div>}</small>
                                                     </div>
-                                                    {/* <p class="text-body mb-3">Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet lorem.</p> */}
+
                                                     <table className='table table-bordered'>
                                                         <thead>
                                                             <tr>

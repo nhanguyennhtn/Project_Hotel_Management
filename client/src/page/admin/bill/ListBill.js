@@ -1,93 +1,186 @@
 import React, { useState, useEffect } from 'react'
-import { apiBillRead } from '../../../axios/axios'
 import AdminHeader from '../components/Header'
+import ContentMenu from '../components/ContentMenu'
+import DatePicker from 'react-datepicker'
+import { apiContractsRead, apiExpensesRead } from "../../../axios/axios"
+import '../../../assets/scss/admin/Bill.scss'
+
 
 export default function ListBill() {
-    const [bill, setBills] = useState([])
-    const [total, setTotal] = useState([])
-    const [searchTerm, setSearchTerm] = useState('');
-    // useEffect(() => {
-    //     fetchData()
-    // }, [])
+    const [expenses, setExxpenses] = useState([])
+    const [contracts, setContracts] = useState([])
 
-    // const fetchData = async () => {
-    //     const res = await apiBillRead()
-    //     setBills(res.bills)
+    useEffect(() => {
+        fetchData()
+    }, [])
 
-    //     const listPrice = res.bills?.map(item => {
-    //         return {
-    //             price: item.price.replaceAll('.', "").replaceAll('vnđ', "").trim()
-    //         }
-    //     })
+    const fetchData = async () => {
+        const res = await apiExpensesRead()
+        const result = await apiContractsRead()
+        setExxpenses(res.expenses)
+        console.log(expenses);
+        setContracts(result.contracts)
+    }
 
-    //     const total = listPrice.reduce((a, b) => parseInt(a) + parseInt(b.price), 0)
-    //     let price = total.toString().split('').reverse()
-    //     let priceEnd = ''
-    //     price.map((item, index) => {
-    //         if (++index % 3 === 0 && index !== price.length) {
-    //             item += '.'
-    //         }
-    //         priceEnd += item
-    //         return priceEnd
-    //     })
-    //     setTotal(priceEnd.split('').reverse().join('') + ' vnđ')
-    //     console.log(listPrice, '.....');
+    const userActive = (data) => {
+        try {
+            return contracts?.filter((item) => {
+                return item.room._id === data && item.status == true
+            })?.map((item, index) => {
+                console.log(item.user.fullname, index);
+                return item.user.fullname
+            })
+        } catch (e) {
+            console.log(e);
+        }
+    }
 
-    // }
+    const waterOut = (item) => {
+        const result = parseFloat(item.costOfWater) * parseFloat(item.Water)
+        return result
+    }
+    const electricOut = (item) => {
+        const result = parseFloat(item.costOfWater) * parseFloat(item.Water)
+        return result
+    }
+    const sumDetail = (item) => {
+        const result = parseFloat(item.room.price) + parseFloat(item.electric) + (parseFloat(electricOut(item))) + (parseFloat(waterOut(item))) + parseFloat(item.Other)
+        return result
+    }
 
-    // return (<div className='container-md'>
-    //     <div className='row d-flex  my-4 '>
-    //         {/* <h4 className='ml-4 col-9'>Tổng doanh thu: {total}</h4> */}
-    //         {/* <input className='col-3 ms-auto border rounded-2' id='search' onChange={e => setSearchTerm(e.target.value)} placeholder="Tìm kiếm theo tên..." /> */}
-    //     </div>
-    //     <table class="table table-bordered container-md my-4">
-    //         <thead>
-    //             <tr>
-    //                 <th scope="col">#</th>
-    //                 <th scope="col">Title</th>
-    //                 <th scope="col">Price</th>
-    //                 <th scope="col">Fullname</th>
-    //                 <th scope="col">PhoneNumber</th>
-    //                 <th scope="col">Identity Card</th>
-    //                 <th scope="col">Verification</th>
-    //                 <th scope="col">Date</th>
-    //             </tr>
-    //         </thead>
-    //         <tbody>
-    //             {bill?.length > 0 && bill.filter((item) => {
-    //                 return searchTerm.toLowerCase() === '' ? item : item.fullname.toLowerCase().includes(searchTerm)
-    //             }).map((item, index) => <tr>
-    //                 <th scope="row">{++index}</th>
-    //                 <td>{item.title}</td>
-    //                 <td>{item.price}</td>
-    //                 <td>{item.fullname}</td>
-    //                 <td>{item.phoneNumber}</td>
-    //                 <td>{item.CMT}</td>
-    //                 <td><img style={{ width: 300, height: 200, objectFit: 'cover' }} src={item.minhchung} alt='' /></td>
-    //                 <td>{item.ngay}</td>
+    const [value, setValue] = useState('')
 
-    //                 {/* <td>{item.status
-    //                     ? <div className='mb-3'>
-    //                         <button className="btn" disabled>Đã được đặt</button>
-    //                         <button onClick={() => handleCancel(item)} className='btn btn-outline-danger ms-3'>Hủy đặt phòng</button>
-    //                     </div>
-    //                     : <div className='mb-3'>
-    //                         <button onClick={() => handleConfirm(item)} className='btn btn-outline-success'>Xác nhận</button>
-    //                         <button onClick={() => handleCancel(item)} className='btn btn-outline-danger ms-3'>Hủy bỏ</button>
-    //                     </div>
-    //                 }</td> */}
-    //             </tr>)}
-
-
-    //         </tbody>
-    //     </table>
-
-    // </div>
-
-    // )
     return (
-        <div>
+        <div className='wrapper'>
             <AdminHeader />
+            <div class="container-fluid">
+                <div class="row">
+                    <ContentMenu />
+                    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                            <h1 class="h4 ms-4">Hóa đơn</h1>
+                            <div class="btn-toolbar mb-2 mx-4">
+                                <label>Lọc theo:</label>
+                                <DatePicker required class="btn btn-sm btn-outline-secondary dropdown-toggle" selected={value} className='mx-2 '
+                                    onChange={(date) => setValue(date)} dateFormat="MM/yyyy" placeholderText='Lọc theo tháng' />
+                                <div class="btn-group me-2">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary"><i class="bi bi-reply-all-fill"></i> Export  </button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div className=" container-md my-4">
+                            <div className=" row ">
+                                <div className="col">
+                                    <div class="container-xxl py-5">
+                                        <div class="container">
+                                            <div class="row g-4 ">
+                                                {expenses.length > 0 ? expenses.filter((item) => {
+                                                    return item.status === true
+                                                }).map((item) => {
+                                                    return (
+                                                        <div class="col-lg-4 col-md-4 wow fadeInUp" data-wow-delay="0.1s">
+                                                            <div class="room-item card rounded overflow-hidden max-heigth-listbill">
+                                                                <div class="px-4 mt-2">
+                                                                    <div class="d-flex justify-content-between mb-3">
+                                                                        <h5 class="mb-0">Hóa đơn</h5>
+                                                                        <div class="ps-2">
+                                                                            <small class="fa fa-star text-primary">{item.date}</small>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="d-flex mb-3">
+                                                                        <small class="border-end me-3 pe-1">{item.room.title}</small>
+                                                                        <small class="border-end me-3 pe-1" >{userActive(item.room._id)}</small>
+                                                                        <small class=" me-3 pe-3" >{item.status === true ? 'Đã đóng' : <div className="text-primary">Chưa đóng</div>}</small>
+                                                                    </div>
+
+                                                                    <table className='table table-bordered'>
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <td>
+
+                                                                                </td>
+                                                                                <td className="w-50">Số sử dụng (KW/Khối)</td>
+                                                                                <td>Giá (KW/Khối)</td>
+                                                                                <td className='w-100'>Thành tiền (VNĐ)</td>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr>
+                                                                                <td>Điện</td>
+                                                                                <td>{item.costOfElectricity}</td>
+                                                                                <td>{item.electric}</td>
+                                                                                <td>{Intl.NumberFormat('vi-VN').format(electricOut(item))}</td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>Nước</td>
+                                                                                <td>{item.costOfWater}</td>
+                                                                                <td>{item.Water}</td>
+                                                                                <td>{Intl.NumberFormat('vi-VN').format(waterOut(item))}</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                                <div className='mx-2 mb-3'>
+                                                                    <p className='row ms-2'>
+                                                                        <div className="col-3">
+                                                                            Phòng:
+                                                                        </div>
+                                                                        <div className="col">
+
+                                                                            {Intl.NumberFormat('vi-VN').format(item.room.price)} VNĐ/Tháng
+                                                                        </div>
+                                                                    </p>
+                                                                    <p className='row ms-2'>
+                                                                        <div className="col-3">
+                                                                            <label>Điện:</label>
+                                                                        </div>
+                                                                        <div className="col">
+                                                                            {Intl.NumberFormat('vi-VN').format(electricOut(item))} VNĐ
+                                                                        </div>
+                                                                    </p>
+                                                                    <p className='row ms-2'>
+                                                                        <div className="col-3">
+                                                                            <label>Nước:</label>
+                                                                        </div>
+                                                                        <div className="col">
+                                                                            {Intl.NumberFormat('vi-VN').format(waterOut(item))} VNĐ
+                                                                        </div>
+                                                                    </p>
+                                                                    <p className='row ms-2'>
+                                                                        <div className="col-3">
+                                                                            <label>Khác:</label>
+                                                                        </div>
+                                                                        <div className="col">
+                                                                            {Intl.NumberFormat('vi-VN').format(item.Other)} VNĐ
+
+                                                                        </div>
+                                                                    </p>
+                                                                    <p className='row ms-2'>
+                                                                        <div className="col-3">
+                                                                            <label>Tổng:</label>
+                                                                        </div>
+                                                                        <div className="col">
+                                                                            {Intl.NumberFormat('vi-VN').format(sumDetail(item))}  VNĐ
+                                                                        </div>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })
+                                                    :
+                                                    <div> Không có dữ liệu </div>}
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div >
+                    </main>
+                </div>
+            </div>
         </div>
     )
 }

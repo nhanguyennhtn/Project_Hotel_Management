@@ -22,54 +22,57 @@ export default function LoginPage() {
     }
 
     return (
-        <div className='register-wrapper'>
+        <div>
             <Header />
-            <div className="container">
-                <section className=" d-flex flex-column align-items-center justify-content-center py-4">
-                    <div className="container">
-                        <div className="row justify-content-center">
-                            <div className="col-xl-4 col-lg-6 col-md-8 d-flex flex-column align-items-center justify-content-center">
-                                <div className="card mb-3">
-                                    <div className="card-body">
-                                        <div className="pt-4 pb-2">
-                                            <h5 className="card-title text-center pb-0 fs-4">Đăng nhập tài khoản</h5>
-                                        </div>
-                                        <form onSubmit={handleSubmit(onSubmitLogin)} className="row g-3">
-                                            <div className="col-12">
-                                                {/* <label htmlFor="yourUsername" className="form-label">Username</label> */}
-                                                <div className="input-group">
-                                                    <input {...register('username')} required maxLength={30} minLength={6} autoComplete='off'
-                                                        type="text" className="form-control" id="yourUsername" placeholder='Tên đăng nhập' />
-                                                    <div className="invalid-feedback">Please enter your username.</div>
+            <div className='register-wrapper card container-xxl'>
+                <div className="container">
+                    <section className=" d-flex flex-column align-items-center justify-content-center py-4">
+                        <div className="container">
+                            <div className="row justify-content-center">
+                                <div className="col-xl-4 col-lg-6 col-md-8 d-flex flex-column align-items-center justify-content-center">
+                                    <div className="card mb-3">
+                                        <div className="card-body">
+                                            <div className="pt-4 pb-2">
+                                                <h5 className="card-title text-center pb-0 fs-4">Đăng nhập tài khoản</h5>
+                                            </div>
+                                            <form onSubmit={handleSubmit(onSubmitLogin)} className="row g-3">
+                                                <div className="col-12">
+                                                    {/* <label htmlFor="yourUsername" className="form-label">Username</label> */}
+                                                    <div className="input-group">
+                                                        <input {...register('username')} required maxLength={30} minLength={6} autoComplete='off'
+                                                            type="text" className="form-control" id="yourUsername" placeholder='Tên đăng nhập' />
+                                                        <div className="invalid-feedback">Please enter your username.</div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="col-12">
-                                                {/* <label htmlFor="yourPassword" className="form-label">Password</label> */}
-                                                <input {...register('password')} required maxLength={30} minLength={6} autoComplete='off'
-                                                    type="password" className="form-control" id="yourPassword" placeholder='Mật khẩu' />
-                                                <div className="invalid-feedback">Please enter your password!</div>
-                                            </div>
-                                            <div className="col-12">
-                                                <button className="btn btn-primary w-100" type="submit">Đăng nhập</button>
-                                            </div>
-                                            <span className='text-center text-danger'>
-                                                {errMessage}
-                                            </span>
-                                            <div className="col-12">
-                                                <p className="small mb-0">Bạn chưa có tài khoản? <Link to="/register">Đăng ký</Link></p>
-                                            </div>
-                                        </form>
+                                                <div className="col-12">
+                                                    {/* <label htmlFor="yourPassword" className="form-label">Password</label> */}
+                                                    <input {...register('password')} required maxLength={30} minLength={6} autoComplete='off'
+                                                        type="password" className="form-control" id="yourPassword" placeholder='Mật khẩu' />
+                                                    <div className="invalid-feedback">Please enter your password!</div>
+                                                </div>
+                                                <div className="col-12">
+                                                    <button className="btn btn-primary w-100" type="submit">Đăng nhập</button>
+                                                </div>
+                                                <span className='text-center text-danger'>
+                                                    {errMessage}
+                                                </span>
+                                                <div className="col-12">
+                                                    <p className="small mb-0">Bạn chưa có tài khoản? <Link to="/register">Đăng ký</Link></p>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
             </div>
             <Footer />
         </div>
+
     )
-    // return (<div className='register-wapper'>
+
     //     <Header />
     //     <div className='height-page'>
     //         <div className='container justify-content-center justify-content-center align-items-center '>
@@ -143,6 +146,6 @@ export default function LoginPage() {
     //     </div>
     //     <Footer />
     // </div>
-
+    // return (<div className='register-wapper'>
     // )
 }

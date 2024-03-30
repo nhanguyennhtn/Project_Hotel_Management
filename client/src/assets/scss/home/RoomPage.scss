@@ -1,16 +1,29 @@
-.card {
-    .home-card-desc {
-        .qill {
-            height: auto;
+// .qill {
+//     height: auto;
 
-            .ql-editor {
-                overflow: hidden;
-                display: -webkit-box;
-                -webkit-line-clamp: 3;
-                line-clamp: 3 !important;
-                -webkit-box-orient: vertical;
-                font-size: medium;
-            }
+//     .ql-editor {
+//         overflow: hidden;
+//         display: -webkit-box;
+//         -webkit-line-clamp: 3;
+//         line-clamp: 3 !important;
+//         -webkit-box-orient: vertical;
+//         font-size: medium;
+//     }
+// }
+
+.show-line {
+    height: 50px;
+}
+
+.wow {
+    .overflow-hidden {
+        .ql-editor {
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            font-size: medium;
+            line-clamp: 3;
         }
     }
 }

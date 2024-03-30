@@ -25,7 +25,7 @@ export default function Register() {
     return (
         <div className='register-wapper'>
             <Header />
-            <div className="container">
+            <div className="container card">
                 <section className=" d-flex flex-column align-items-center justify-content-center py-4">
                     <div className="container">
                         <div className="row justify-content-center">

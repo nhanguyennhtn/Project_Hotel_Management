@@ -36,13 +36,13 @@ export default function UserContract() {
     }
 
     const handleExport = (item) => {
-        
+
     }
 
     return (
         <div>
             <Headers />
-            <div className=" container-md">
+            <div className=" container-xxl card">
                 {contracts?.filter((item) => {
                     return item.user.username === userInfo
                 }).map((item) => {

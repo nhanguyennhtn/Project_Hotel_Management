@@ -71,23 +71,23 @@
                 height: auto;
             }
 
-            input[type=file] {
-                display: block;
-                width: 100%;
-                padding: 0.375rem 0.75rem;
-                font-size: 1rem;
-                font-weight: 400;
-                line-height: 1.5;
-                color: var(--bs-body-color);
-                -webkit-appearance: none;
-                -moz-appearance: none;
-                appearance: none;
-                background-color: var(--bs-body-bg);
-                background-clip: padding-box;
-                border: var(--bs-border-width) solid var(--bs-border-color);
-                border-radius: var(--bs-border-radius);
-                transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-            }
+            // input[type=file] {
+            //     display: block;
+            //     width: 100%;
+            //     padding: 0.375rem 0.75rem;
+            //     font-size: 1rem;
+            //     font-weight: 400;
+            //     line-height: 1.5;
+            //     color: var(--bs-body-color);
+            //     -webkit-appearance: none;
+            //     -moz-appearance: none;
+            //     appearance: none;
+            //     background-color: var(--bs-body-bg);
+            //     background-clip: padding-box;
+            //     border: var(--bs-border-width) solid var(--bs-border-color);
+            //     border-radius: var(--bs-border-radius);
+            //     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+            // }
         }
 
         .avatar {
@@ -126,4 +126,66 @@
 .img-QR {
     width: 20%;
     height: auto;
+}
+
+.cmt-content {
+    img {
+        width: 45px;
+        height: 45px;
+    }
+
+    .cmt-content-star {
+        color: rgb(254, 161, 22);
+
+        .cmt-content-item {
+            cursor: pointer;
+            width: 31.5px;
+        }
+    }
+
+    input {
+        width: 30px;
+    }
+}
+
+.star.active {
+    border-right-color: gold;
+}
+
+.star.clicked {
+    color: gold;
+}
+
+.cmt-reviews {
+    padding: 0;
+}
+
+.img-kind {
+    max-height: 100px;
+}
+
+.filer-same {
+    .filer-same-content {
+        flex-wrap: nowrap;
+
+        .filer-same-item {
+            img {
+                height: 200px;
+                width: 200px;
+            }
+
+            small {
+                width: 80px;
+                height: auto;
+            }
+
+            .react-fix {
+                overflow: hidden;
+                height: 12vh;
+                position: relative;
+            }
+        }
+
+    }
+
 }
