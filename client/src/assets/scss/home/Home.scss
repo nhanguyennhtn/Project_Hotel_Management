@@ -25,7 +25,7 @@
 }
 
 .home-wrapper {
-
+    margin-top: 75  px;
     .card {
         .home-card-desc {
             overflow: hidden;
@@ -33,7 +33,6 @@
             -webkit-line-clamp: 3;
             line-clamp: 3;
             -webkit-box-orient: vertical;
-
         }
 
         .ql-editor {
@@ -43,6 +42,7 @@
             line-clamp: 3;
             -webkit-box-orient: vertical;
             font-size: medium;
+            // padding: 0;
         }
 
         img {
@@ -53,6 +53,14 @@
     }
 
 
+}
+
+.content-reponse{
+    .react_qill_css {
+        overflow: hidden;
+        height: 15vh;
+        position: relative;
+    }
 }
 
 #height {
@@ -111,4 +119,8 @@
         animation-delay: 0.1s;
         animation-name: fadeInUp;
     }
+}
+
+.height-info-user{
+    min-height: 60vh;
 }

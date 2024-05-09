@@ -12,5 +12,11 @@
 }
 
 .height_news {
-    min-height: 80vh;
+    min-height: auto;
+}
+
+.add-new-page {
+    .news-wrapper {
+        margin-top: 75px;
+    }
 }

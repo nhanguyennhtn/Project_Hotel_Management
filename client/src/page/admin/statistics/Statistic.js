@@ -1,115 +1,148 @@
-
-import { useEffect, useState } from 'react';
-import { apiExpensesRead, apiUsersRead } from '../../../axios/axios';
-import ContentMenu from '../components/ContentMenu'
+import React, { useState, useEffect } from 'react'
 import AdminHeader from '../components/Header'
+import ContentMenu from '../components/ContentMenu'
+import { apiMotelsRead } from '../../../axios/axios'
+import { Pie } from 'react-chartjs-2'
+import '../../../assets/scss/admin/Bill.scss'
+
 
 export default function Statistic() {
-    const account = JSON.parse(window.sessionStorage.getItem('userInfo'))
-    const [customers, setCustomers] = useState([])
-
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    const today = new Date();
-    const ngay = today.toLocaleDateString("vi-VN", options)
-
     useEffect(() => {
-        fetchData()
-    }, [])
+        createPieCharts();
+    }, []);
 
-    const fetchData = async () => {
-        const res = await apiUsersRead()
-        setCustomers(res.user)
-
+    const sliceSize = (dataNum, dataTotal) => {
+        return (dataNum / dataTotal) * 360;
     }
 
-    const total = customers.map((item) => {
-        return {
-            price: item.price
+    const addSlice = (sliceSize, pieElement, offset, sliceID, color) => {
+        return (
+            <div className={'slice ' + sliceID}>
+                <span></span>
+            </div>
+        )
+    }
+
+    const iterateSlices = (sliceSize, pieElement, offset, dataCount, sliceCount, color) => {
+        const maxSize = 179;
+        const sliceID = 's' + dataCount + '-' + sliceCount;
+
+        if (sliceSize <= maxSize) {
+            return addSlice(sliceSize, pieElement, offset, sliceID, color);
+        } else {
+            const slice = addSlice(maxSize, pieElement, offset, sliceID, color);
+            iterateSlices(sliceSize - maxSize, pieElement, offset + maxSize, dataCount, sliceCount + 1, color);
+            return slice;
         }
-    })
+    }
 
+    const createPie = (id) => {
+        const listData = [];
+        let listTotal = 0;
+        let offset = 0;
+        let i = 0;
+        const pieElement = id + ' .pie-chart__pie';
+        const dataElement = id + ' .pie-chart__legend';
+
+        let color = [
+            'cornflowerblue',
+            'olivedrab',
+            'orange',
+            'tomato',
+            'crimson',
+            'purple',
+            'turquoise',
+            'forestgreen',
+            'navy'
+        ];
+
+        color = shuffle(color);
+
+        document.querySelectorAll(dataElement + ' span').forEach((element) => {
+            listData.push(Number(element.innerHTML));
+        });
+
+        listData.forEach((data) => {
+            listTotal += data;
+        });
+
+        listData.forEach((data, i) => {
+            const size = sliceSize(data, listTotal);
+            const slice = iterateSlices(size, pieElement, offset, i, 0, color[i]);
+            document.querySelector(dataElement + ' li:nth-child(' + (i + 1) + ')').style.borderColor = color[i];
+            offset += size;
+        });
+    }
+
+    const shuffle = (a) => {
+        for (let i = a.length; i; i--) {
+            const j = Math.floor(Math.random() * i);
+            const x = a[i - 1];
+            a[i - 1] = a[j];
+            a[j] = x;
+        }
+
+        return a;
+    }
+
+    const createPieCharts = () => {
+        createPie('.pieID--micro-skills');
+        createPie('.pieID--categories');
+        createPie('.pieID--operations');
+    }
     return (
-        <div className='wrapper'>
-            <AdminHeader />
-            <div class="container-fluid">
-                <div class="row">
-                    <ContentMenu />
-                    <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                            <h1 class="h4 ms-4">Danh sách phòng hoạt động</h1>
-                        </div>
-                        <div className='card container-md'>
-                            <div className='row p-4'>
-                                {/* <div className='col-5 m-3 mb-3 fw-bold'>
-                                    <p>Đơn vị: ................<br />
-                                        Địa chỉ: ................</p>
-                                </div>
-                                <div className='col-6 m-4 mb-3 text-center fw-bold'>
-                                    <p>Mẫu số ....<br />
-                                        (Ban hành theo Thông tư số 200/2014/TT-BTC <br />
-                                        Ngày 22/12/2014 của ộ tài chính)</p>
-                                </div> */}
-                                <div className='col-12 my-2'>
-                                    <h5 className='text-center'>BẢNG TỔNG HỢP DOANH THU TIỀN THUÊ PHÒNG CỦA NHÀ TRỌ</h5>
-                                </div>
-                                <div className='col-12 my-2 '>
-                                    <p><b>- Thời điểm kiểm kê</b>: {ngay}
-                                        <br />
-                                        <b>- Họ và tên</b>: Nguyễn Hoàng Sang
-                                        <br />
-                                        <b>- Chức vụ</b>: Kế toán
-                                    </p>
-                                </div>
-                                <table class="table table-bordered container-md my-3">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col">STT</th>
-                                            <th scope="col">Phòng</th>
-                                            <th scope="col">Giá</th>
-                                            <th scope="col">Tên</th>
-                                            <th scope="col">Số điện thoại</th>
-                                            <th scope="col">CMND</th>
-                                            {/* <th scope="col">Verification</th> */}
-                                            <th scope="col">Ngày</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {customers?.length > 0 && customers.map((item, index) => <tr>
-                                            <th scope="row">{++index}</th>
-                                            <td>{item.room.title}</td>
-                                            <td>{Intl.NumberFormat('vi-VN').format(item.room.price)} vnđ</td>
-                                            <td>{item.fullname}</td>
-                                            <td>{item.phone}</td>
-                                            <td>{item.IDcard}</td>
-                                            {/* <td><img style={{ width: 300, height: 200, objectFit: 'cover' }} src={item.minhchung} alt='' /></td> */}
-                                            <td>{item.date}</td>
-                                        </tr>)}
-                                        <tr >
-                                            <td colspan="7" className='text-end mx-4 fs-5'>Tổng doanh thu:{
-                                                Intl.NumberFormat('vi-VN').format(customers.map((item) => {
-                                                    return { price: item.room.price }
-                                                }).reduce((a, b) => parseFloat(a) + parseFloat(b.price), 0))} vnđ </td>
-                                        </tr>
-
-
-                                    </tbody>
-                                </table>
-                                <div className='col-6 text-center'>
-                                    <p className='fw-bold'>Người ghi số</p>
-                                    <p>(ký ghi gõ họ tên)</p>
-                                </div>
-                                <div className='col-6 text-center mb-4'>
-                                    <p className='fw-bold'>Ngày .... tháng .... năm .... </p>
-                                    <p className='fw-bold'>Kế toán trưởng</p>
-                                    <p>(ký ghi gõ họ tên)</p>
-                                </div>
-                                <div className='mb-4'>
-
+        <div className='content-reponse'>
+            <div className='wrapper-ee'>
+                <AdminHeader />
+                <div class="container-fluid">
+                    <div class="row">
+                        <ContentMenu />
+                        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                                <h1 class="h4 ms-4">Thống kê doanh thu</h1>
+                            </div>
+                            <div className='bg-light'>
+                                {/* <Pie data={data} /> */}
+                            </div>
+                            <div class="wrapper">
+                                <h1>Answered Questions</h1>
+                                <div class="pie-charts">
+                                    <div class="pieID--micro-skills pie-chart--wrapper">
+                                        <h2>Micro-Skills</h2>
+                                        <div class="pie-chart">
+                                            <div class="pie-chart__pie"></div>
+                                            <ul class="pie-chart__legend">
+                                                <li><em>Additive</em><span>642</span></li>
+                                                <li><em>Multiplicative</em><span>358</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="pieID--categories pie-chart--wrapper">
+                                        <h2>Categories</h2>
+                                        <div class="pie-chart">
+                                            <div class="pie-chart__pie"></div>
+                                            <ul class="pie-chart__legend">
+                                                <li><em>Horizontal</em><span>768</span></li>
+                                                <li><em>Vertical</em><span>232</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="pieID--operations pie-chart--wrapper">
+                                        <h2>Operations</h2>
+                                        <div class="pie-chart">
+                                            <div class="pie-chart__pie"></div>
+                                            <ul class="pie-chart__legend">
+                                                <li><em>Addition</em><span>486</span></li>
+                                                <li><em>Subtraction</em><span>156</span></li>
+                                                <li><em>Multiplication</em><span>215</span></li>
+                                                <li><em>Division</em><span>143</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                    </main>
+                        </main>
+                    </div>
                 </div>
             </div>
         </div>

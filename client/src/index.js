@@ -19,6 +19,7 @@ import ContacPage from './page/contactPage.js';
 import Login from './auth/Login.js'
 import Register from './auth/Register.js'
 import RegisterBill from './page/ResgiterBill.js';
+import UserProfile from './page/profiles/index.js';
 import UserContract from './page/profiles/contract.js';
 import UserBill from './page/profiles/bill.js';
 
@@ -60,6 +61,7 @@ root.render(
         <Route path='/news/create' element={< NewsPageCreate />} />
         <Route path='/contact' element={<ContacPage />} />
         <Route path='/bill' element={<RegisterBill />} />
+        <Route path='/user/profile' element={<UserProfile />} />
         <Route path='/user/contract' element={<UserContract />} />
         <Route path='/user/bill' element={<UserBill />} />
         <Route path='/login' element={<Login />} />

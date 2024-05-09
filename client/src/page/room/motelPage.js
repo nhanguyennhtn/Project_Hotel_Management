@@ -18,7 +18,7 @@ export default function Room() {
         <div>
             <Header />
             <div className='home-wrapper'>
-                <div className=' card pt-4'>
+                <div className=' card pt-4 '>
                     <RoomPage />
                 </div >
 

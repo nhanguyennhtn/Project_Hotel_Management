@@ -1,18 +1,20 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import FileBase64 from 'react-file-base64'
 import { useLocation } from 'react-router-dom'
-import { apiMotelsUpdate, apiUsersCreate } from '../axios/axios'
+import { apiMotelsUpdate, apiUsersCreate, apiUsersRead } from '../axios/axios'
 import '../assets/scss/home/RoomDetail.scss'
 import { image4 } from '../assets/img/panner'
 import { useForm } from 'react-hook-form'
 import Headers from '../components/Header'
 import Footer from '../components/Footer'
+import '../assets/scss/home/newPage.scss'
 import moment from 'moment'
 import "react-datepicker/dist/react-datepicker.css"
 import DatePicker from "react-datepicker"
 
 export default function RegisterBill() {
     const accountinfo = JSON.parse(window.sessionStorage.getItem('userInfo'))
+    const [customers, setCustomers] = useState([])
     const room = useLocation().state
     const { register: registerCreate, handleSubmit: handleSubmitCreate } = useForm()
     const [image, setImage] = useState()
@@ -24,7 +26,16 @@ export default function RegisterBill() {
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     const today = new Date();
     const ngay = today.toLocaleDateString("vi-VN", options)
-    console.log(room);
+
+
+    // useEffect(()=> {
+    //     handleLicenseDate()
+    // },[])
+
+    // const fetchData = async () => {
+    //     const res = await apiUsersRead()
+    //     setCustomers(res.user)
+    // }
     const handleBooking = async (data, e) => {
         e.preventDefault()
         const startDate = selectedDate.toLocaleDateString("vi-VN", options)
@@ -59,13 +70,16 @@ export default function RegisterBill() {
         }
     }
 
-    const handleLicenseDate = (date) => {
+    const handleLicenseDate = () => {
         if (licenseDate) {
+            console.log(licenseDate);
             const dateNow = moment()
             const licenseDateObj = moment(licenseDate)
-            if (licenseDateObj.isValid() && licenseDateObj.isAfter(dateNow)) {
-                alert('Ngày cấp chứng minh thư không hợp lệ.');
-                setLicenseDate(ngay)
+            if (licenseDateObj.isValid() && licenseDateObj.isAfter(dateNow)) {                
+                if (window.confirm('Ngày cấp chứng minh thư không hợp lệ.')){
+                    setLicenseDate(today)
+                    console.log(licenseDate);
+                }
             }
         }
         return <div class="mb-3">
@@ -94,10 +108,10 @@ export default function RegisterBill() {
     return (
         <div>
             <Headers />
-            <div className='bg-white'>
+            <div className='bg-white news-wrapper'>
                 <div className='card container-sm'>
                     <div class="text-center wow fadeInUp pt-4" data-wow-delay="0.1s">
-                        <h6 class="section-title text-center text-primary text-uppercase">Register</h6>
+                        <h6 class="section-title text-center text-primary text-uppercase"></h6>
                         <h1 class="mb-5">Đăng ký đặt <span class="text-primary text-uppercase">Phòng</span></h1>
                     </div>
                     <div className='row '>
@@ -116,7 +130,7 @@ export default function RegisterBill() {
                                 <div class="mb-3">
                                     <label for="IDcard" class="form-label">Chứng minh thư</label>
                                     <input required {...registerCreate('IDcard')}
-                                        type="number" class="form-control ps-3" id="IDcard" placeholder='IdCard' />
+                                        type="number" class="form-control ps-3" id="IDcard" placeholder='366--- --- ---' />
                                 </div>
                                 {handleLicenseDate()}
                                 <div className="mb-3">

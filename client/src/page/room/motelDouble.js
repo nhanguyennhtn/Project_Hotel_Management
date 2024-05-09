@@ -38,7 +38,6 @@ export default function Room() {
                     <div className='container-xxl pb-5'>
                         <div className='container'>
                             <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                                <h6 class="section-title text-center text-primary text-uppercase">Our Rooms</h6>
                                 <h1 class="mb-5">Khám phá <span class="text-primary text-uppercase">dãy phòng ghép</span></h1>
                             </div>
                             <div className='row g-4'>

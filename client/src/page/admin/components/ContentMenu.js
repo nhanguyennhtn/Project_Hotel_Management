@@ -53,7 +53,7 @@ export default function ContentMenu() {
                     </li>
                     <li class="nav-item">
                         <Link class="nav-link" to="/admin/expense">
-                            <i class="bi bi-droplet-fill"></i> Chi phí cho thuê
+                            <i class="bi bi-droplet-fill"></i> Điện nước phòng
                         </Link>
                     </li>
 

@@ -6,7 +6,7 @@ import AdminHeader from '../components/Header'
 import ContentMenu from '../components/ContentMenu'
 import { useForm } from 'react-hook-form'
 function Create() {
-    const motel = useLocation().state
+    const contract = useLocation().state
     const { register: registerCreate, handleSubmit: handleSubmitCreate } = useForm()
     const [contractvalue, setContracts] = useState([])
     const [value, setValue] = useState('')
@@ -21,6 +21,7 @@ function Create() {
         setContracts(res.contracts)
 
     }
+    // const contractsRead = contractvalue.filter((item) => item._id === contract._id)
     const ngay = () => {
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         const today = new Date();
@@ -28,14 +29,22 @@ function Create() {
         return date
     }
     const handleCreate = async (data, e) => {
-        // e.preventDefault()   
+        e.preventDefault()
+        const checkactive = contract.status
         try {
-            const res = await apiExpensesCreate({ ...data, room: motel._id, desc: value, date: ngay() })
-            alert('Thành công')
-            e.target.reset()
-            fetchData()
-            setValue()
-            // navigate('/admin/expense')
+            if (checkactive !== true) {
+                if (window.confirm('Phòng đang trống không có đối tượng sử dụng')) {
+                    navigate('/admin/expense')
+                }
+            } else {
+                const res = await apiExpensesCreate({ ...data, user: contract.user._id, room: contract.room._id, desc: value, date: ngay() })
+                alert('Thành công')
+                e.target.reset()
+                fetchData()
+                setValue()
+                navigate('/admin/expense')
+            }
+
         } catch (e) {
             console.log(e)
         }
@@ -43,6 +52,25 @@ function Create() {
     const handleCancel = () => {
         navigate('/admin/expense')
     }
+
+    // const active = () => {
+    //     return contractvalue?.map((item) => {
+    //         return (
+    //             {
+    //                 title: item.room.title,
+    //                 status: item.user.status
+    //             }
+    //         )
+    //     })
+    // }
+    const activeChecked = (data) => {
+        if (data.status == true) {
+            return <div className='col'>Đang hoạt động</div>
+        } else {
+            return <div className='col'>Phòng trống</div>
+        }
+    }
+    console.log(contract);
     return (
         <div className='wrapper'>
             <AdminHeader />
@@ -99,16 +127,12 @@ function Create() {
                                             </span>
                                         </div>
                                         <div className=''>
-                                            {contractvalue?.filter((item) => {
-                                                return item.room._id === motel._id && item.status === true
-                                            })?.map((item) => {
-                                                return (
-                                                    <div className='row mx-2'>
-                                                        <div className='col'>{item.room.title}</div>
-                                                        <div className='col'>{item.user.status ? 'Đang hoạt động' : 'phòng trống'}</div>
-                                                    </div>
-                                                )
-                                            })}
+                                            <div className='row mx-2'>
+                                                <div className='col'>{contract.room.title}</div>
+                                                <div className='col'>{contract.user.fullname}</div>
+                                                {/* {activeChecked(item)} */}
+                                                {/* <div className='col'>{item.status ? 'Đang hoạt động' : 'Phòng trống'}</div> */}
+                                            </div>
                                         </div>
                                     </div>
                                     <div className='card '>

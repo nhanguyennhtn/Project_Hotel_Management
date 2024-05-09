@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { apiAccountLogin } from '../axios/axios'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
+import './Register.scss'
 
 export default function LoginPage() {
     const { register, handleSubmit } = useForm()
@@ -24,8 +25,8 @@ export default function LoginPage() {
     return (
         <div>
             <Header />
-            <div className='register-wrapper card container-xxl'>
-                <div className="container">
+            <div className='register-wapper card container-xxl'>
+                <div className="container mt-4">
                     <section className=" d-flex flex-column align-items-center justify-content-center py-4">
                         <div className="container">
                             <div className="row justify-content-center">

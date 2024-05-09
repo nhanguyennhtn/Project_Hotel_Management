@@ -11,6 +11,7 @@ const expenseController = {
         model.find()
             .populate('contract')
             .populate('room')
+            .populate('user')
             .then(expenses => res.json({ expenses }))
             .catch(next)
     },

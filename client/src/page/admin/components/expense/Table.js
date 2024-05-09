@@ -35,7 +35,6 @@ export default function Table() {
 
 
     return (<div className="container-md">
-
         <table className="table table-bordered mt-2 shadow">
             <thead>
                 <tr>
@@ -55,8 +54,8 @@ export default function Table() {
                     <tr key={item._id}>
                         <td>{++index}</td>
                         <td>{item.room.title}</td>
-                        <td>{item.costOfElectricity}</td>
-                        <td>{item.costOfWater}</td>
+                        <td>{Intl.NumberFormat('vi-VN').format(item.costOfElectricity)}</td>
+                        <td>{Intl.NumberFormat('vi-VN').format(item.costOfWater)}</td>
                         <td>{item.electric}</td>
                         <td>{item.Water}</td>
                         <td>{item.date}</td>
@@ -66,8 +65,6 @@ export default function Table() {
                                 :
                                 <button onClick={() => submitProduct(item)} className="btn btn-outline-warning">Xác nhận</button>
                             }
-
-
                         </td>
                         <td>
                             <button className="btn btn-outline-danger" onClick={() => deleteProduct(item._id)}>Xoá</button>

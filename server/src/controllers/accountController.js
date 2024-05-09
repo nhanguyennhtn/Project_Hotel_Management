@@ -39,7 +39,7 @@ const accountController = {
                 res.status(200).json({ status: true, user })
             })
             .catch(next)
-    },
+    }
 }
 
 module.exports = accountController

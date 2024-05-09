@@ -48,8 +48,8 @@ export default function Header() {
     // )
     
     return (
-        <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-2 shadow">
-            <Link class="navbar-brand col-md-3 col-lg-2 me-0 px-3 " to="/admin">Adminn-{userinfo}</Link>
+        <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-2 shadow ">
+            <Link class="navbar-brand col-md-3 col-lg-2 me-0 px-3 " to="/admin">Admin-{userinfo}</Link>
             <div class="navbar-nav">
                 <div class="dropdown ">
                     <button class="btn btn-secondary" onClick={handleLogout}>Đăng xuất</button>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { image7 } from '../../assets/img/panner'
+import { image1, image2, image3, image7 } from '../../assets/img/panner'
 import Header from '../../components/Header'
 import FileBase64 from 'react-file-base64'
 import ReactQuill from 'react-quill'
@@ -43,43 +43,47 @@ export default function NewPageCreate() {
         Negative('/news')
     }
     return (
-        <div>
+        <div className='add-news-page'>
             <Header />
-            <div className=' height_news bg-white'>
-                <div className='container-md card height_news pb-3 pt-2'>
-                    <div className='row'>
-                        <div className='col card'>
-                            <div className='fadeInUp pt-4 d-flex'>
-                                <img src={image7} className='avatar rounded-0 rounded-circle img w-auto' alt='' />
-                                <h6 className='section-title pt-3 ps-3 text-uppercase  align-items-center'>{accountinfo.username}</h6>
-                            </div>
-                            <div className='nav-item py-3'>
-                                <ReactQuill theme='snow' value={value} onChange={setValue} />
-                                <FileBase64
-                                    multiple={true}
-                                    onDone={(files) => {
-                                        const newImages = files.map(file => ({
-                                            base64: file.base64,
-                                            preview: file.base64
-                                        }));
-                                        setImages([...images, ...newImages])
-                                    }}
-                                />
-                                <div>
-                                    {images?.map((image, index) => (
-                                        <img key={index} src={image.preview} alt={`Uploaded ${index}`} style={{ width: '100px', height: '100px', margin: '5px' }} />
-                                    ))}
+            <div className=' height_news bg-white news-wrapper'>
+                <div className='container-md height_news pb-3 pt-2'>
+                    <div className='row justify-content-center'>
+                        <div className='d-flex p-2 gap-2 card'>
+                            <div className='col-7 card'>
+                                <div className='fadeInUp pt-4 d-flex ms-2'>
+                                    <img src={image7} className='avatar rounded-0 rounded-circle img w-auto' alt='' />
+                                    <h6 className='section-title pt-3 ps-3 text-uppercase  align-items-center'>{accountinfo.username}</h6>
+                                </div>
+                                <div className='nav-item py-3'>
+                                    <ReactQuill theme='snow' value={value} onChange={setValue} placeholderText='hhh'/>
+                                    <FileBase64
+                                        multiple={true}
+                                        onDone={(files) => {
+                                            const newImages = files.map(file => ({
+                                                base64: file.base64,
+                                                preview: file.base64
+                                            }));
+                                            setImages([...images, ...newImages])
+                                        }}
+                                    />
+                                    <div>
+                                        {images?.map((image, index) => (
+                                            <img key={index} src={image.preview} alt={`Uploaded ${index}`} style={{ width: '100px', height: '100px', margin: '5px' }} />
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className='pb-3 ms-auto'>
+                                    <Link class="btn btn-sm btn-dark rounded py-2 px-4" to={'/news'} >Hủy</Link>
+                                    <button onClick={() => submitCreateNews()} class="btn btn-sm btn-primary rounded py-2 px-4 m-2" to={'/news'} >Đăng tin</button >
                                 </div>
                             </div>
-                            <div className='pb-3 ms-auto'>
-                                <Link class="btn btn-sm btn-dark rounded py-2 px-4" to={'/news'} >Hủy</Link>
-                                <button onClick={() => submitCreateNews()} class="btn btn-sm btn-primary rounded py-2 px-4 m-2" to={'/news'} >Đăng tin</button >
+                            <div className='col-5'>
+                                {/* <img src={image2} style={{width: 100 + '%', height: 300}} alt=''></img> */}
                             </div>
                         </div>
-                        <div className='col-4'>
-                            nguyen
-                        </div>
                     </div>
+
+
                 </div>
             </div >
             <Footer />

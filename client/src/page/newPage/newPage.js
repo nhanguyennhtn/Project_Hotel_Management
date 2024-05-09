@@ -70,9 +70,8 @@ export default function NewsPage() {
     return (
         <div>
             <Header />
-            <div className=" bg-white">
+            <div className=" bg-white news-wrapper">
                 <div class="text-center wow fadeInUp pt-4" data-wow-delay="0.1s">
-                    <h6 class="section-title text-center text-primary text-uppercase">NewsPage</h6>
                     <h1 class="mb-5">Tin<span class="text-primary text-uppercase">nỗi bật</span></h1>
                 </div>
                 {news?.filter((item) => {

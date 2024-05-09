@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import AdminHeader from './components/Header'
 import ContentMenu from './components/ContentMenu'
 import { apiMotelsRead, apiNewsDelete, apiNewsRead, apiNewsUpdate } from '../../axios/axios'
+import ReactQuill from 'react-quill'
+import '../../assets/scss/home/Home.scss'
 
 export default function Reponse() {
     const [motels, setMotels] = useState([])
@@ -63,10 +65,10 @@ export default function Reponse() {
                                     }).map((item, index) => <tr>
                                         <th scope="row">{++index}</th>
                                         <td>{item.user.fullname}</td>
-                                        <td>{item.desc}</td>
+                                        <td><ReactQuill theme="bubble" value={item.desc} readOnly={true} className='react_qill_css'/></td>
                                         <td>{item.date}</td>
                                         <td>{item.img.map((img) =>
-                                            <img style={{ width: 300, height: 200, objectFit: 'cover' }} src={img.preview} alt='' />
+                                            <img style={{ width: 200, height: 100, objectFit: 'cover' }} src={img.preview} alt='' />
                                         )}</td>
                                         <td>
                                             <div className='mb-3 d-flex'>

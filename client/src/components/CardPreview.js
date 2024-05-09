@@ -16,8 +16,8 @@ export default function CardPreview() {
         setMotels(room.motels)
     }
     return (
-        <div class="container-xxl py-5">
-            <div class="container">
+        <div class="container-xxl py-5 bg-white">
+            <div class="container ">
                 <div class="row g-5 align-items-center">
                     <div class="col-lg-6">
                         <h6 class="section-title text-start text-primary text-uppercase">About Us</h6>

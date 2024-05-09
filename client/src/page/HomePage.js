@@ -9,10 +9,13 @@ import RoomPage from '../components/RoomPage'
 import '../assets/scss/bootstrap.scss'
 import CardPreview from '../components/CardPreview'
 import NewsPage from '../components/NewsPage'
+import { Link } from 'react-router-dom'
+import ReactQuill from 'react-quill'
 
 // import Rooms from '../components/Rooms'
 export default function HomePage() {
-    const [motels, setMotels] = useState()
+    const [motels, setMotels] = useState([])
+    const [search, setSearch] = useState('')
 
     useEffect(() => {
         fetchData()
@@ -23,26 +26,25 @@ export default function HomePage() {
         setMotels(res.motels)
     }
 
-    // const renderButton = (item) => {
-    //     if (item.status === null || item.status === undefined) {
-    //         return <p className='text-end'>
-    //             <Link to={`/room/${item._id}`} state={item} className="btn btn-outline-primary" >Xem ngay</Link>
-    //         </p>
-    //     } else if (item.status === true) {
-    //         return <p className='text-end'>
-    //             <button className="btn" disabled>Đã được đặt</button>
-    //         </p>
-    //     } else if (item.status === false) {
-    //         return <p className='text-end'>
-    //             <button className="btn" disabled>Chờ phản hồi</button>
-    //         </p>
-    //     }
-    // }
+    const renderButton = (item) => {
+        if (item.status === null || item.status === undefined) {
+            return <Link class="btn btn-sm btn-dark rounded py-2 px-4" to={'/bill'} state={item} >Đặt phòng</Link>
+
+        } else if (item.status === true) {
+            return <button className="btn btn-sm btn-dark rounded py-2 px-4" disabled>Đã được đặt</button>
+
+        } else if (item.status === false) {
+            return <button className="btn btn-sm btn-dark rounded py-2 px-4" disabled>Chờ phản hồi</button>
+
+        }
+    }
+    const [showAll, setShowAll] = useState(false)
+    const itemToShow = showAll ? motels : motels.slice(0, 6)
 
     return (
         <div>
             <Header />
-            <div class=" bg-white p-0 height-img-title mt-4">
+            <div class=" bg-white p-0 height-img-title ">
                 <div className='home-wrapper '>
                     <div className='bg-white'>
                         {/* <div id="carouselExampleDark" className="carousel carousel-dark slide" data-bs-ride="carousel">style
@@ -116,9 +118,65 @@ export default function HomePage() {
                                 </button>
                             </div>
                         </div>
-                        <CardPreview />
-                        <RoomPage />
 
+                        <div className='row w-100'>
+                            <div class="container-xxl pb-5">
+                                <div class="container">
+                                    <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                                        <h1 class="mb-5">Khám phá <span class="text-primary text-uppercase">dãy phòng</span></h1>
+                                    </div>
+                                    <div class="row g-4">
+                                        {itemToShow.filter((item) => {
+                                            return search.toLowerCase() === '' ? item : item.price.toLowerCase().includes(search)
+                                        }).map((item, index) => (
+                                            <div key={index} class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                                                <div class="room-item shadow rounded overflow-hidden">
+                                                    <div class="position-relative">
+                                                        <img class="img-fluid img" src={item.image} alt="" />
+                                                        <small class="position-absolute start-0 top-100 translate-middle-y bg-primary text-white rounded py-2 px-3 ms-4">{Intl.NumberFormat('vi-VN').format(item.price)} VNĐ/Tháng</small>
+                                                    </div>
+                                                    <div class="p-4 mt-2">
+                                                        <div class="d-flex justify-content-between mb-3">
+                                                            <h5 class="mb-0">{item.title}</h5>
+                                                            <div class="ms-2">
+                                                                <small class="bi bi-star-fill text-primary ms-1"></small>
+                                                                <small class="bi bi-star-fill text-primary ms-1"></small>
+                                                                <small class="bi bi-star-fill text-primary ms-1"></small>
+                                                                <small class="bi bi-star-fill text-primary ms-1"></small>
+                                                                <small class="bi bi-star-fill text-primary ms-1"></small>
+                                                            </div>
+                                                        </div>
+                                                        <div class="d-flex mb-3">
+                                                            <small class="border-end me-3 pe-3"><i class="bi bi-house-fill text-primary me-2"></i>{item.kind}</small>
+                                                            <small class="border-end me-3 pe-3"><i class="bi bi-geo-alt-fill text-primary me-2"></i>{item.area}</small>
+                                                            <small><i class="bi bi-arrows text-primary me-2"></i>{item.size}</small>
+                                                        </div>
+                                                        {/* <p class="text-body mb-3">Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed diam stet diam sed stet lorem.</p> */}
+                                                        <ReactQuill theme="bubble" value={item.desc} readOnly={true} />
+                                                        <div class="d-flex justify-content-between">
+                                                            <Link class="btn ms-auto w-100 btn-primary rounded py-2 px-4" to={`/room/${item._id}`} state={item} >Xem ngay</Link>
+                                                            {/* {renderButton(item)} */}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                        )}
+                                    </div>
+                                    <div className='row p-2 mt-2'>
+                                        <Link className='text-center fs-5 btn' to={'/room'}>Xem thêm...</Link>
+                                    </div>
+                                    {/* <div className='row p-2 mt-2'>
+                                        {showAll ?
+                                            <button className='text-center fs-5 btn delay-1' onClick={() => setShowAll(false)} to={'/room'}>Ẩn bớt...</button>
+                                            :
+                                            <button className='text-center fs-5 btn delay-1' onClick={() => setShowAll(true)} to={'/room'}>Xem thêm...</button>
+                                        }
+                                    </div> */}
+                                </div>
+                            </div>
+                        </div>
+                        {/* <CardPreview /> */}
                     </div >
                 </div >
                 <NewsPage />
