@@ -87,9 +87,9 @@ export default function Customers() {
                                                 <td>{item.phone}</td>
                                                 <td>{item.date}</td>
                                                 <td>{item.status ?
-                                                    <p className="text-primary">Đang hoạt động</p>
+                                                    <p className="text-primary">Có phòng</p>
                                                     :
-                                                    <p className="text-secondary">Ngưng hoạt động</p>
+                                                    <p className="text-secondary">Đã trả phòng</p>
                                                 }</td>
                                                 <td><Link to={'/admin/customers/Detail'} state={item} className="btn btn-outline-primary mb-4" >Chi tiết</Link></td>
                                             </tr>

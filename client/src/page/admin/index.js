@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import '../../assets/scss/template/dashboard.scss'
 import ContentMenu from './components/ContentMenu'
 import AdminHeader from './components/Header'
-import { apiContractsRead, apiContractsUpdate, apiMotelsRead, apiMotelsUpdate, apiUsersRead, apiUsersUpdate } from '../../axios/axios'
+import { apiContractsRead, apiContractsUpdate, apiMotelsUpdate, apiUsersRead, apiUsersUpdate } from '../../axios/axios'
 import { Link } from 'react-router-dom'
 import Table from './components/expense/Table'
 

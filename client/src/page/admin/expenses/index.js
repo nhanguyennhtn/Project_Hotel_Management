@@ -1,26 +1,21 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import AdminHeader from '../components/Header'
-import { apiMotelsRead, apiExpensesRead, apiContractsRead, apiExpensesDelete, apiExpensesUpdate } from '../../../axios/axios'
+import { apiExpensesRead, apiContractsRead, apiExpensesDelete, apiExpensesUpdate, apiCostOfElectsRead } from '../../../axios/axios'
 import ContentMenu from '../components/ContentMenu'
 import '../../../assets/scss/admin/Admin.scss'
 import 'react-quill/dist/quill.snow.css'
 
-import DatePicker from "react-datepicker"
-import Detail from '../components/expense/Detail'
-import Table from '../components/expense/Table'
-import DateFiler from '../components/expense/DateFiler'
-import ReactQuill from 'react-quill'
-
 export default function Admin() {
     const [expenses, setExpenses] = useState([])
     const [contractvalue, setContracts] = useState([])
-    const [rooms, setRooms] = useState([])
+    const [costOfElects, setCostOfElects] = useState([])
     const [valueIn, setValueIn] = useState('')
     const [valueOut, setValueOut] = useState('')
-    const [searchTerm, setSearchTerm] = useState('')
-    const [isTable, setIsTable] = useState(false)
-    const [isBill, setIsBill] = useState(false)
+    const [showInfoForm, setShowInfoForm] = useState(false)
+    const [currentForm, setCurrentForm] = useState(null)
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState('');
 
     useEffect(() => {
         fetchData()
@@ -28,38 +23,19 @@ export default function Admin() {
 
     const fetchData = async () => {
         const res = await apiExpensesRead()
-        const result = await apiMotelsRead()
         const contract = await apiContractsRead()
+        const costOfElect = await apiCostOfElectsRead()
+        setCostOfElects(costOfElect.costOfElect)
         setContracts(contract.contracts)
-        setRooms(result.motels)
         setExpenses(res.expenses)
     }
-    const submitShowTable = () => {
-        setIsTable(!isTable)
-    }
-    const submitDetail = () => {
-        setIsBill(!isBill)
-    }
-    const active = (data) => {
-        return contractvalue?.filter((item) => {
-            return item.room._id === data._id
-        })?.map((item) => {
-            return (
-                {
-                    title: item.room.title,
-                    status: item.user.status
-                }
-            )
-        })
-    }
-    const activeChecked = (data) => {
-        if (data.status == true) {
-            return <Link to={'/admin/expense/create'} state={data} className='btn fs-6 m-0 px-0 '>Create</Link>
-        } else if (data.status == null || data.status == false) {
-            return <Link to={'/admin/expense/create'} state={data} className='btn fs-6 text-secondary m-0 px-0'>Create</Link>
-        }
-    }
-
+    const costOfElect = costOfElects.filter((item) => item.destroy === 'tồn tại')
+    const expensed = expenses?.filter((item) => {
+        const itemDate = new Date(item.createdAt);
+        const currentDate = new Date();
+        return itemDate.getMonth() === currentDate.getMonth() &&
+            itemDate.getFullYear() === currentDate.getFullYear();
+    });
     const deleteProduct = async id => {
         if (true) {
             await apiExpensesDelete(id)
@@ -70,60 +46,14 @@ export default function Admin() {
         if (window.confirm('Xác nhận thành công')) {
             await apiExpensesUpdate({ _id: item._id, status: true })
             fetchData()
-
         }
     }
-    const handleShowData = () => {
-        return (
-            <div className='card'>
-                <table className="table table-bordered mt-2 shadow">
-                    <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th>Phòng</th>
-                            <th>Giá điện (đồng/kWh)</th>
-                            <th>Giá nước (đồng/m3)</th>
-                            <th>Điện </th>
-                            <th>Nước</th>
-                            <th>Ngày</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {expenses.length > 0 ? expenses.map((item, index) =>
-                            <tr key={item._id}>
-                                <td>{++index}</td>
-                                <td>{item.room.title}</td>
-                                <td>{Intl.NumberFormat('vi-VN').format(item.costOfElectricity)}</td>
-                                <td>{Intl.NumberFormat('vi-VN').format(item.costOfWater)}</td>
-                                <td>{item.electric}</td>
-                                <td>{item.Water}</td>
-                                <td>{item.date}</td>
-                                <td>
-                                    {item.status === true ?
-                                        <button className="btn btn-outline-secondary btn-block " disabled>Đã đóng</button>
-                                        :
-                                        <button onClick={() => submitProduct(item)} className="btn btn-outline-warning">Xác nhận</button>
-                                    }
-                                </td>
-                                <td>
-                                    <button className="btn btn-outline-danger" onClick={() => deleteProduct(item._id)}>Xoá</button>
-                                </td>
-                            </tr>
-                        ) :
-                            <tr>
-                                <td colSpan='7'>Không có dữ liệu</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        )
-    }
     const createExpenses = contractvalue?.filter((item) => {
-        return item.room.title === valueIn && item.user.fullname === valueOut
+        return item.room.title === valueIn && item.user?.fullname === valueOut
     })
+
+    console.log(expensed);
+
     return (
         <div className='wrapper'>
             <AdminHeader />
@@ -136,33 +66,37 @@ export default function Admin() {
                             <div className='btn-toolbar mb-2 mx-4 '>
                                 <div class="btn-group me-2">
                                     <Link to={'/admin/expense/export'} class="btn btn-sm btn-outline-secondary"><i class="bi bi-reply-all-fill"></i> Export  </Link>
+
                                 </div>
                             </div>
                         </div>
-                        <div className='container-xxl  p-2 rounded-2'>
+                        <div className='container-xxl p-2 rounded-2'>
                             <div classname='row justify-content-center gap-2'>
-                                <select value={valueIn} onChange={(e) => setValueIn(e.target.value)} class=" col-md-4 p-2 rounded-3 bd-highlight">
-                                    <option selected value=''>Tên phòng</option>
-                                    {contractvalue.filter((item) => {
-                                        return item.status == true
-                                    }).map((item) => {
-                                        return <option value={item.room.title}>{item.room.title}</option>
-                                    })}
+                                <select value={valueIn} onChange={(e) => setValueIn(e.target.value)} className="col-md-4 p-2 rounded-3 bd-highlight">
+                                    <option value=''>Tên phòng</option>
+                                    {contractvalue
+                                        .filter((item) => {
+                                            const roomInExpenses = expensed.some(expense => expense.room._id === item.room._id);
+                                            return item.status === true && !roomInExpenses;
+                                        })
+                                        .map((item) => (
+                                            <option key={item._id} value={item.room.title}>{item.room.title}</option>
+                                        ))
+                                    }
                                 </select>
                                 <select value={valueOut} onChange={(e) => setValueOut(e.target.value)} class="col-md-4 p-2 ms-2 rounded-3 bd-highlight">
                                     <option selected value=''>Họ tên</option>
                                     {contractvalue.filter((item) => {
-                                        return item.status == true && item.room.title === valueIn
-                                    }).map((item) => {
-                                        return <option value={item.user.fullname}>{item.user.fullname}</option>
+                                        return item.status === true && item.room?.title === valueIn
+                                    })?.map((item) => {
+                                        return <option value={item.user?.fullname}>{item.user?.fullname}</option>
                                     })}
                                 </select>
-                                {createExpenses.map((item) => {
+                                {createExpenses?.map((item) => {
                                     return (
                                         <Link to={'/admin/expense/create'} state={item} className='col-1 btn btn-warning  ms-2 rounded-3'>Tạo</Link>
                                     )
                                 })}
-                                {/* <button className='col-1 btn btn-warning  ms-2 rounded-3 justify-content-center' >Tạo</button> */}
                             </div>
                         </div>
                         <div className='admin-wrapper mt-4 ' >
@@ -174,9 +108,18 @@ export default function Admin() {
                                                 <th scope="col">#</th>
                                                 <th>Phòng</th>
                                                 <th>Họ tên</th>
-                                                <th>Điện </th>
-                                                <th>Nước</th>
-                                                <th>Khác</th>
+                                                <th>
+                                                    <div className='row'>
+                                                        <div className='text-center'><span>Điện (Kw/h)</span></div>
+                                                    </div>
+                                                </th>
+                                                <th>
+                                                    <div className='row'>
+                                                        <div className='text-center'><span>Nước (Cm3)</span></div>
+                                                    </div>
+                                                </th>
+                                                <th>Khác (VNĐ)</th>
+                                                <th>Tổng tiền</th>
                                                 <th>Ngày</th>
                                                 <th></th>
                                                 <th></th>
@@ -197,20 +140,32 @@ export default function Admin() {
                                                             <td>{++index}</td>
                                                             <td>{item.room.title}</td>
                                                             <td>{item?.user?.fullname}</td>
-                                                            <td>{Intl.NumberFormat('vi-VN').format(item.electric * item.costOfElectricity)} vnđ</td>
-                                                            <td>{Intl.NumberFormat('vi-VN').format(item.Water * item.costOfWater)} vnđ</td>
-                                                            <td>{Intl.NumberFormat('vi-VN').format(item.Other)} vnđ</td>
-                                                            {/* <td><ReactQuill value={item.desc} readOnly={true} theme="bubble" /></td> */}
+                                                            <td>
+                                                                <div className='row'>
+                                                                    <span className='col text-center'>{Intl.NumberFormat('vi-VN').format(item.electricEnd - item.electricStart)}</span>
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div className='row'>
+                                                                    <span className='col text-center'>{Intl.NumberFormat('vi-VN').format(item.WaterEnd - item.WaterStart)}</span>
+                                                                </div>
+                                                            </td>
+                                                            <td>{item.Other <= 0 ? '0' : Intl.NumberFormat('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).format((parseFloat(item.Other)))}</td>
+                                                            <td>{
+                                                                Intl.NumberFormat('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).format(costOfElect[0]?.costOfElectricity * (item.electricEnd - item.electricStart) +
+                                                                    costOfElect[0]?.costOfWater * (item.WaterEnd - item.WaterStart) )
+                                                            } VNĐ</td>
                                                             <td>{item.date}</td>
                                                             <td>
                                                                 {item.status === true ?
-                                                                    <button className="btn btn-outline-secondary btn-block " disabled>Đã đóng</button>
+                                                                    <i class="bi bi-check2-circle text-success f-4 text-center"></i>
                                                                     :
                                                                     <button onClick={() => submitProduct(item)} className="btn btn-outline-warning">Xác nhận</button>
                                                                 }
                                                             </td>
                                                             <td>
-                                                                <button className="btn btn-outline-danger" onClick={() => deleteProduct(item._id)}>Xoá</button>
+                                                                <button className="btn btn-outline-danger border-0" onClick={() => deleteProduct(item._id)}><i class="bi bi-trash3-fill text-danger "></i></button>
+                                                                <button className="btn btn-outline-warning border-0" onClick={() => { setShowInfoForm(true); setCurrentForm(item) }}><i class="bi bi-info-circle text-warning "></i></button>
                                                             </td>
                                                         </tr>
                                                     )
@@ -224,32 +179,108 @@ export default function Admin() {
                                     </table>
                                 </div>
                             </div>
-                            {/* <div className='row'>
-                                <div className='card py-2'>
-                                    <div className='table-expense '>
-                                        <table className='table table-bordered'>
-                                            <thead>
-                                                {rooms.map((item) => {
-                                                    return (
-                                                        <th>
-                                                            {item.title}
-                                                        </th>
-                                                    )
-                                                })}
-                                            </thead>
-                                            <tbody>
-                                                {rooms?.map((item) => {
-                                                    return (
-                                                        <td>{activeChecked(item)}</td>
-                                                    )
-                                                })}
-                                            </tbody>
-                                        </table>
+                        </div>
+                        {
+                            showInfoForm && (
+                                <div className='modal' style={{ display: 'block', zIndex: 1000 }}>
+                                    <div className='modal-dialog modal-dialog-centered container-fluid'>
+                                        <div className='modal-content'>
+                                            <div className='modal-header'>
+                                                <h5 className="modal-title">Chi tiết - {currentForm.room.title}</h5>
+                                                <button type="button" className="btn-close" onClick={() => { setShowInfoForm(false); setError(''); setSuccess(''); }}></button>
+                                            </div>
+                                            <div className='modal-body'>
+                                                {error && <div className="alert alert-danger">{error}</div>}
+                                                {success && <div className="alert alert-success">{success}</div>}
+                                                <div className='row'>
+                                                    <div className='col'>
+                                                        <p><strong>Họ và tên: </strong> {currentForm.user.fullname}</p>
+                                                        <p><strong>Ngày: </strong> {currentForm.date}</p>
+                                                    </div>
+                                                </div>
+                                                <div className='row'>
+                                                    <div className='col'>
+                                                        <p><strong>Loại </strong></p>
+                                                    </div>
+                                                    <div className='col'>
+                                                        <p><strong>SL</strong></p>
+                                                    </div>
+                                                    <div className='col'>
+                                                        <p><strong>T.tiền</strong></p>
+                                                    </div>
+                                                </div>
+                                                <div className='row'>
+                                                    <div className='col'>
+                                                        <p><strong>Điện: </strong></p>
+                                                    </div>
+                                                    <div className='col'>
+                                                        <p>{currentForm.electricEnd - currentForm.electricStart}</p>
+                                                    </div>
+                                                    <div className='col'>
+                                                        <p>
+                                                            {Intl.NumberFormat('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).format(
+                                                                (parseFloat(currentForm.electricEnd) - parseFloat(currentForm.electricStart)) * parseFloat(costOfElect[0].costOfElectricity)
+                                                            )}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className='row border-bottom mb-2'>
+                                                    <div className='col'>
+                                                        <p><strong>Nước:</strong></p>
+                                                    </div>
+                                                    <div className='col'>
+                                                        <p>{currentForm.WaterEnd - currentForm.WaterStart}</p>
+                                                    </div>
+                                                    <div className='col '>
+                                                        <p>
+                                                            {Intl.NumberFormat('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).format(
+                                                                (parseFloat(currentForm.WaterEnd) - parseFloat(currentForm.WaterStart)) * parseFloat(costOfElect[0].costOfWater)
+                                                            )}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className='row'>
+                                                    <div className='col'>
+                                                        <p><strong>Tổng tiền: </strong></p>
+                                                    </div>
+                                                    <div className='col'>
+                                                        <p>{ }</p>
+                                                    </div>
+                                                    <div className='col '>
+                                                        <p>
+                                                            {Intl.NumberFormat('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).format(
+                                                                ((parseFloat(currentForm.WaterEnd) - parseFloat(currentForm.WaterStart)) * parseFloat(costOfElect[0].costOfWater) +
+                                                                    (parseFloat(currentForm.electricEnd) - parseFloat(currentForm.electricStart)) * parseFloat(costOfElect[0].costOfElectricity)
+                                                                )
+                                                            )}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className='row border-top '>
+                                                    <div className='col text-uppercase'>
+                                                        <p><strong>Thanh toán: </strong></p>
+                                                    </div>
+                                                    <div className='col'>
+                                                        <p>{ }</p>
+                                                    </div>
+                                                    <div className='col '>
+                                                        <p>
+                                                            {currentForm.status ? Intl.NumberFormat('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).format(
+                                                                ((parseFloat(currentForm.WaterEnd) - parseFloat(currentForm.WaterStart)) * parseFloat(costOfElect[0].costOfWater) +
+                                                                    (parseFloat(currentForm.electricEnd) - parseFloat(currentForm.electricStart)) * parseFloat(costOfElect[0].costOfElectricity) +
+                                                                    parseFloat(currentForm.Other)
+                                                                )
+                                                            ) : 0}
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div> */}
-                            {/* {<Table />} */}
-                        </div>
+                            )
+                        }
 
                     </main>
                 </div>

@@ -53,9 +53,9 @@ export default function NewPageCreate() {
                                 <div className='fadeInUp pt-4 d-flex ms-2'>
                                     <img src={image7} className='avatar rounded-0 rounded-circle img w-auto' alt='' />
                                     <h6 className='section-title pt-3 ps-3 text-uppercase  align-items-center'>{accountinfo.username}</h6>
-                                </div>
-                                <div className='nav-item py-3'>
-                                    <ReactQuill theme='snow' value={value} onChange={setValue} placeholderText='hhh'/>
+                                </div>  
+                                <div className='modal-body'>
+                                    <ReactQuill theme='snow' value={value} onChange={setValue} placeholderText='hhh' />
                                     <FileBase64
                                         multiple={true}
                                         onDone={(files) => {

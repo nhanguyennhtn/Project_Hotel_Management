@@ -6,8 +6,8 @@ export default function Header() {
     const userinfo = JSON.parse(window.sessionStorage.getItem('userInfo')).username
     const handleLogout = () => {
         if (window.confirm('Are you sure?')) {
-            localStorage.removeItem('userInfo')
-            nagative('/')
+            sessionStorage.removeItem('userInfo')
+            nagative('/login')
         }
     }
 

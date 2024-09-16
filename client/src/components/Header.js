@@ -20,7 +20,7 @@ export default function Header() {
     const handleLogout = () => {
         if (window.confirm('are you sure?')) {
             sessionStorage.removeItem('userInfo')
-            window.location.href = '/'
+            window.location.href = '/login'
         }
     }
 
@@ -44,7 +44,7 @@ export default function Header() {
                     Phòng đặt
                 </button>
                 <ul class="dropdown-menu w-auto" aria-labelledby="dropdownMenuButton1">
-                    {check.map((item) => item.room.title)}
+                    {check.map((item) => item.room?.title)}
                     <p>(Đang chờ phản hồi)</p>
                     <li><hr class="dropdown-divider m-0 pb-0" /></li>
                     <li><button className='btn btn-primary w-100 rounded-3' onClick={() => handleCancel} >Hủy</button></li>

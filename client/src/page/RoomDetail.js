@@ -94,10 +94,29 @@ function Rooms() {
     //         <i class="bi bi-star-fill cmt-content-item fs-4"></i>
     //     </span>
     // ))
+    const handlecheck = () => {
+        console.log('ugfwiugwio');
+        
+        if (window.confirm('Hãy cập nhật thông tin của bạn')) {
+            return window.location.href = '/user/profile'
+        }
+    }
 
     const renderButton = () => {
+        const infUsers = customers.filter((infUser) => infUser.username._id === accountinfo._id)
+        console.log(infUsers.length);
+
+
         if (room.status === null || room.status === undefined) {
-            return <Link class="btn btn-sm btn-primary rounded py-2 px-5 rounded-2 ms-5" to={'/bill'} state={room} >Đặt phòng</Link>
+            if (infUsers.length > 0) {
+                return <Link class="btn btn-sm btn-primary rounded py-2 px-5 rounded-2 ms-5" to={'/bill'} state={room} >Đặt phòng</Link>
+            }
+                return <button className='btn btn-sm btn-primary rounded py-2 px-5 rounded-2 ms-5' onClick={() => handlecheck()}>Đặt phòng</button>
+                // if (window.confirm('Hãy cập nhật thông tin của bạn')) {
+                //     return window.location.href = '/user/profile'
+                // }
+
+            // return <Link class="btn btn-sm btn-primary rounded py-2 px-5 rounded-2 ms-5" to={'/bill'} state={room} >Đặt phòng</Link>
 
         } else if (room.status === true) {
             return <button className="btn btn-sm btn-dark rounded py-2 px-5 ms-5" disabled>Đã được đặt</button>
@@ -107,6 +126,8 @@ function Rooms() {
 
         }
     }
+
+
 
     const deleteProduct = async id => {
         if (window.confirm("Delete")) {
@@ -146,12 +167,12 @@ function Rooms() {
     const reviewslice = reviews.filter((item) => item.room._id === room._id)
     const itemToShow = showAll ? reviewslice : reviewslice.slice(0, 2)
 
-    const itemShows =  () => {
+    const itemShows = () => {
         const reviewslice = reviews.filter((item) => item.room._id === room._id)
         const value = btnValue
-        
+
     }
-    console.log(itemShows(),'ji');
+    // console.log(itemShows(), 'ji');
 
     const [showReplyForm, setShowReplyForm] = useState(false);
     const replyFrom = () => {
@@ -172,6 +193,14 @@ function Rooms() {
 
     }
 
+    const filteredReviews = reviews?.filter((item) => {
+        if (btnValue === 'all') {
+            return item.room._id === room._id;
+        } else {
+            return item.room._id === room._id && item.star === parseInt(btnValue);
+        }
+    });
+
     return (
         <div className="room-wrapper ">
             <div>
@@ -184,7 +213,7 @@ function Rooms() {
                             <div class="card-body reactqill-fix">
                                 <img src={room.image} class="card-img-top img-fluid w-100 card shadow" alt='...' />
                                 <div class="d-flex align-items-center mb-4 mt-4">
-                                    <h1 class="mb-0 ">{room.title}</h1>
+                                    <h1 class="mb-0 ">{room?.title}</h1>
                                     <div class="ps-2 fs-5">
                                         <small class="bi bi-star-fill text-primary ms-1"></small>
                                         <small class="bi bi-star-fill text-primary ms-1"></small>
@@ -205,7 +234,7 @@ function Rooms() {
                                     <ReactQuill value={room.desc} readOnly={true} theme="bubble" />
                                 </p>
                                 <div className='price fs-5 mb-2'>
-                                    Giá: {room.price}/tháng
+                                    Giá: {Intl.NumberFormat('vi-VN').format(room.price)} VNĐ/Tháng
                                 </div>
                             </div>
                             <div className='btn w-100 pt-3'>
@@ -257,7 +286,7 @@ function Rooms() {
                             <div className=' mt-4 '>
                                 <div className='card shadow-sm'>
                                     <div className='d-flex p-2'>
-                                        <p className='mx-3 mt-2 fw-bold fs-5'>Address<i class="bi bi-check-circle mx-4 "></i></p>
+                                        <p className='mx-3 mt-2 fw-bold fs-5'>Địa chỉ<i class="bi bi-check-circle mx-4 "></i></p>
                                     </div>
 
                                     <label className='text-right mx-3 p-2'><i class="bi bi-geo-alt-fill "></i> Đ. Trần Hưng Đạo, An Phú, Ninh Kiều, Cần Thơ, Việt Nam</label>
@@ -266,7 +295,7 @@ function Rooms() {
                                             <iframe class="position-relative rounded w-100 h-100 map_info"
                                                 src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15676.733646510674!2d105.7736131!3d10.0346448!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31a08919f8927df5%3A0x28c8fc7a8cc25dc7!2zTkhBzIAgVFJPzKMgU0lOSCBWScOKTiAyMTgvMTdCIFRIxJAgQ8OCzIBOIFRIxqA!5e0!3m2!1svi-VN!2sus!4v1647148616358!5m2!1svi-VN!2sus"
                                                 frameborder="0" allowfullscreen="" aria-hidden="false"
-                                                tabindex="0"></iframe>
+                                                tabindex="0" ></iframe>
                                         </div>
                                     </div>
 
@@ -299,8 +328,11 @@ function Rooms() {
                                                                         <small class="bi bi-star-fill text-primary ms-1"></small>
                                                                         <small class="bi bi-star-fill text-primary ms-1"></small>
                                                                     </div>
-                                                                    <ReactQuill theme="bubble" value={item.desc} readOnly={true} className='react-fix mb-4' />
-                                                                    <small class=" start-0 translate-middle-y bg-primary text-white rounded py-2 px-2  w-auto">{Intl.NumberFormat('vi-VN').format(item.price)} VNĐ/Tháng</small>
+                                                                    <div className=''>
+
+                                                                        <ReactQuill theme="bubble" value={item.desc} readOnly={true} className='react-fix mb-3 p-0 ' style={{ height: '75px' }} />
+                                                                    </div>
+                                                                    <small class=" start-0 translate-middle-y bg-primary text-white rounded p-2 mt-4  w-auto">{Intl.NumberFormat('vi-VN').format(item.price)} VNĐ/Tháng</small>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -339,22 +371,22 @@ function Rooms() {
                                     <button className='btn btn-outline-primary ms-1 px-4' onClick={() => setBtnValue('2')}>2 sao</button>
                                     <button className='btn btn-outline-primary ms-1 px-4' onClick={() => setBtnValue('1')}>1 sao</button>
                                 </div>
-                                {itemToShow?.map((item) => {
+                                {filteredReviews?.map((item) => {
                                     return (
                                         <div class="d-flex mb-4 cmt-content">
-                                            <img src={image7} class="img-fluid rounded avatar" />
+                                            <img src={image7} class="img-fluid rounded avatar" alt='' />
                                             <div class="ps-3">
                                                 <h6>{item.username.username} <small class="text-body fw-normal fst-italic">{item.date}</small></h6>
-                                                <div class="mb-2">
+                                                <div class="mb-0">
                                                     <div class="ps-2 fs-5">
                                                         {star(item)}
                                                     </div>
                                                 </div>
-                                                <ReactQuill value={item.desc} readOnly={true} theme="bubble" className='cmt-reviews' />
+                                                <ReactQuill value={item.desc} readOnly={true} theme="bubble" className='cmt-reviews ' style={{ height: 'auto' }} />
 
                                                 <button className='btn text-primary ' onClick={() => replyFrom()}><i class="bi bi-reply-fill me-2"></i> Reply</button>
                                                 {(accountinfo.username === 'nhanguyen' || accountinfo._id == item.username._id) ?
-                                                    <button type='delete' className='btn ' onClick={() => deleteProduct(item._id)} ><i class="bi bi-trash3-fill grap-2"></i> Delete</button>
+                                                    <button type='delete' className='btn text-danger' onClick={() => deleteProduct(item._id)} ><i class="bi bi-trash3-fill grap-2 text-danger"></i> Delete</button>
                                                     :
                                                     ''
                                                 }
@@ -385,15 +417,14 @@ function Rooms() {
                                                             </div>
                                                         </div>
                                                         <ReactQuill theme='snow' value={replyInput} onChange={setReplyInput} rows='3' />
-                                                        {/* <textarea  onChange={setReplyInput} rows="3" ></textarea> */}
                                                         <button className="btn btn-primary mt-2 " onClick={replySubmit(item)}>Send</button>
                                                     </div>
                                                 )}
-
                                             </div>
                                         </div>
                                     )
                                 })}
+
                                 <div className='row p-2 mt-2'>
                                     {showAll ?
                                         <button className='text-center text-primary bordered fs-5 btn ' onClick={() => setShowAll(false)}>Ẩn bớt...</button>
@@ -438,15 +469,9 @@ function Rooms() {
                             </div>
                         </div>
                     </div>
-
-
-
                 </div>
-
             </div>
-
             <div>
-
                 <Footer />
             </div>
         </div >

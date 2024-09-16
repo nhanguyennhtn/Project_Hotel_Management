@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import FileBase64 from 'react-file-base64'
 import { useLocation } from 'react-router-dom'
-import { apiMotelsUpdate, apiUsersCreate, apiUsersRead } from '../axios/axios'
+import { apiMotelsUpdate, apiUsersCreate, apiUsersRead, apiUsersUpdate } from '../axios/axios'
 import '../assets/scss/home/RoomDetail.scss'
 import { image4 } from '../assets/img/panner'
 import { useForm } from 'react-hook-form'
@@ -28,14 +28,17 @@ export default function RegisterBill() {
     const ngay = today.toLocaleDateString("vi-VN", options)
 
 
-    // useEffect(()=> {
-    //     handleLicenseDate()
-    // },[])
+    useEffect(() => {
+        fetchData()
+    }, [])
 
-    // const fetchData = async () => {
-    //     const res = await apiUsersRead()
-    //     setCustomers(res.user)
-    // }
+    const fetchData = async () => {
+        const res = await apiUsersRead()
+        setCustomers(res.user)
+    }
+    const cus = customers?.filter((item) => item.username._id === accountinfo._id)
+console.log(cus);
+
     const handleBooking = async (data, e) => {
         e.preventDefault()
         const startDate = selectedDate.toLocaleDateString("vi-VN", options)
@@ -43,7 +46,8 @@ export default function RegisterBill() {
         if (!image) return alert('Image is required')
         try {
             if (accountinfo) {
-                const res = await apiUsersCreate({
+                const res = await apiUsersUpdate({
+                    _id: cus[0]._id,
                     ...data,
                     username: accountinfo._id,
                     room: room._id,
@@ -75,8 +79,8 @@ export default function RegisterBill() {
             console.log(licenseDate);
             const dateNow = moment()
             const licenseDateObj = moment(licenseDate)
-            if (licenseDateObj.isValid() && licenseDateObj.isAfter(dateNow)) {                
-                if (window.confirm('Ngày cấp chứng minh thư không hợp lệ.')){
+            if (licenseDateObj.isValid() && licenseDateObj.isAfter(dateNow)) {
+                if (window.confirm('Ngày cấp chứng minh thư không hợp lệ.')) {
                     setLicenseDate(today)
                     console.log(licenseDate);
                 }
@@ -84,10 +88,10 @@ export default function RegisterBill() {
         }
         return <div class="mb-3">
             <label for="licenseDate" class="form-label">Ngày cấp</label>
-            <DatePicker required selected={licenseDate} className='mx-2 '
+            <DatePicker required selected={cus[0]?.licenseDate} className='mx-2 '
                 onChange={(date) => setLicenseDate(date)} dateFormat="dd/MM/yyyy" placeholderText='Chọn ngày Cấp' />
             <label for="licenseAddress" class="form-label">Nơi cấp</label>
-            <input required {...registerCreate('licenseAddress')}
+            <input required  value={cus[0]?.licenseAddress}
                 type="text" class="mx-2 ps-3" id="licenseAddress" placeholder='Nhập nơi cấp' />
         </div>
     }
@@ -119,32 +123,34 @@ export default function RegisterBill() {
                             <div className='mb-3 RoomDetail-form-body'>
                                 <div class="mb-3">
                                     <label for="fullname" class="form-label">Họ và tên</label>
-                                    <input required {...registerCreate('fullname')}
+                                    <input required  defaultValue={cus[0]?.fullname}
                                         type="text" class="form-control ps-3" id="fullname" placeholder='Nguyễn Văn A' />
                                 </div>
                                 <div class="mb-3">
                                     <label for="phone" class="form-label">Số điện thoại</label>
-                                    <input required {...registerCreate('phone')}
+                                    <input required   defaultValue={cus[0]?.phone}
                                         type="number" class="form-control ps-3" id="phone" placeholder='0390----99' />
                                 </div>
                                 <div class="mb-3">
                                     <label for="IDcard" class="form-label">Chứng minh thư</label>
-                                    <input required {...registerCreate('IDcard')}
+                                    <input required defaultValue={cus[0]?.IDcard}
                                         type="number" class="form-control ps-3" id="IDcard" placeholder='366--- --- ---' />
                                 </div>
                                 {handleLicenseDate()}
-                                <div className="mb-3">
-                                    <label for="cmt" class="form-label ">Hình thức thanh toán</label>
-                                    <select required {...registerCreate('pay')} class="form-select" aria-label="Default select example">
-                                        <option selected>Chọn hình thức thanh toán</option>
-                                        <option value="chuyển khoản">Chuyển khoản</option>
-                                        <option value="trực tiếp">Trực tiếp</option>
-                                    </select>
+                                <div class="mb-3 row">
+                                    <div className='col-4'>
+                                        <label for="cmt" class="form-label ">Tên Phòng: </label>
+                                        <label className='mx-2 fs-6 fw-bold'>{room.title}</label>
+                                    </div>
+                                    <div className='col-5 mx-2'>
+                                        <label for="cmt" class="form-label ">Loại phòng: </label>
+                                        <label className='mx-2 fs-6 fw-bold'>{room.kind}</label>
+                                    </div>
                                 </div>
                                 <div className="mb-3">
                                     <label for="cmt" class="form-label ">Gói thanh toán trả trước </label>
                                     <select required {...registerCreate('costPackage')} class="form-select" aria-label="Default select example">
-                                        <option selected>Chọn gói</option>
+                                        <option defaultValue='1 tháng' selected>Chọn gói</option>
                                         <option value="1 tháng">1 tháng</option>
                                         <option value="3 tháng">3 tháng</option>
                                         <option value="1 năm">1 năm</option>
@@ -174,15 +180,13 @@ export default function RegisterBill() {
                                     </div>
 
                                 </div>
-                                <div class="mb-3 row">
-                                    <div className='col-4'>
-                                        <label for="cmt" class="form-label ">Tên Phòng: </label>
-                                        <label className='mx-2 fs-6 fw-bold'>{room.title}</label>
-                                    </div>
-                                    <div className='col-5 mx-2'>
-                                        <label for="cmt" class="form-label ">Loại phòng: </label>
-                                        <label className='mx-2 fs-6 fw-bold'>{room.kind}</label>
-                                    </div>
+                                <div className="mb-3">
+                                    <label for="cmt" class="form-label ">Hình thức thanh toán</label>
+                                    <select required {...registerCreate('pay')} class="form-select" aria-label="Default select example">
+                                        <option defaultValue='chuyển khoản' selected>Chọn hình thức thanh toán</option>
+                                        <option value="chuyển khoản">Chuyển khoản</option>
+                                        <option value="trực tiếp">Trực tiếp</option>
+                                    </select>
                                 </div>
                                 {showQR()}
                             </div>

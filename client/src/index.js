@@ -44,6 +44,8 @@ import CancelRoom from './page/admin/room/Cancel.js'
 
 import AdminStatistic from './page/admin/statistics/Statistic.js'
 import AdminResponseNews from './page/admin/ReponseNews.js'
+import Camera from './page/admin/webcam/index.js';
+import CostOfElect from './page/admin/expenses/costOfElect/index.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
@@ -66,6 +68,7 @@ root.render(
         <Route path='/user/bill' element={<UserBill />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        
         <Route path='/admin' element={
           JSON.parse(window.sessionStorage.getItem('userInfo'))?.username === 'nhanguyen'
             ? <Admin /> : <Login />} />
@@ -114,6 +117,12 @@ root.render(
         <Route path='/admin/response-news' element={
           JSON.parse(window.sessionStorage.getItem('userInfo'))?.username === 'nhanguyen'
             ? <AdminResponseNews /> : <Login />} />
+        <Route path='/admin/camera' element={
+          JSON.parse(window.sessionStorage.getItem('userInfo'))?.username === 'nhanguyen'
+            ? <Camera /> : <Login />} />
+        <Route path='/admin/costOfElects' element={
+          JSON.parse(window.sessionStorage.getItem('userInfo'))?.username === 'nhanguyen'
+            ? <CostOfElect /> : <Login />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

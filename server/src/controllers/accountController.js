@@ -12,13 +12,13 @@ const accountController = {
         await model.findOne({ username: req.body.username })
             .then(async (user) => {
                 if (user) {
-                    return res.status(400).json({ status: false, message: `User existed` })
+                    return res.status(400).json({ status: false, message: `Người dùng đã tồn tại!` })
                 }
 
                 const createUser = new model(req.body)
                 await createUser.save()
                     .then(() => {
-                        res.status(200).json({ status: true, message: 'User Registered Successfully' })
+                        res.status(200).json({ status: true, message: 'Đăng ký thành công'})
                     })
                     .catch(next)
             })
@@ -29,16 +29,15 @@ const accountController = {
         await model.findOne({ username })
             .then(async (user) => {
                 if (!user) {
-                    res.status(400).json({ status: false, message: `User don't exist` })
+                    res.status(400).json({ status: false, message: `Người dùng không tồn tại` })
                 }
 
                 if (password !== user.password) {
-                    res.status(400).json({ status: false, message: `Password invalid` })
+                    res.status(400).json({ status: false, message: `Mật khẩu không chính xác` })
                 }
-
-                res.status(200).json({ status: true, user })
+                res.status(200).json({ status: true, user})
             })
-            .catch(next)
+            .catch(next)    
     }
 }
 

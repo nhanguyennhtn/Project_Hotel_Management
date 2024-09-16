@@ -20,6 +20,8 @@ export default function UserContract() {
         const res = await apiContractsRead()
         setContracts(res.contracts)
     }
+    console.log(contracts);
+    
 
     const handleSuccess = async (item) => {
         try {
@@ -46,7 +48,7 @@ export default function UserContract() {
         } else if (data.status === false) return <button className='btn btn-outline-secondary mb-4 mx-auto disabled' onClick={() => handleSuccess(data)}>Ngưng hoạt động </button>
     }
     const contractLenght = contracts?.filter((item) => {
-        return item.user.username === userInfo
+        return item.user?.username === userInfo
     })
     return (
         <div>

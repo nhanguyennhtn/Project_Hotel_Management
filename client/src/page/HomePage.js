@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom'
 import ReactQuill from 'react-quill'
 
 // import Rooms from '../components/Rooms'
-export default function HomePage() {
+export default function     HomePage() {
     const [motels, setMotels] = useState([])
     const [search, setSearch] = useState('')
 
@@ -47,34 +47,6 @@ export default function HomePage() {
             <div class=" bg-white p-0 height-img-title ">
                 <div className='home-wrapper '>
                     <div className='bg-white'>
-                        {/* <div id="carouselExampleDark" className="carousel carousel-dark slide" data-bs-ride="carousel">style
-                            <div className="carousel-indicators">
-                                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" className="active" aria-current="true" aria-label="Slide 1"></button>
-                                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                                <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                            </div>
-                            <div className="carousel-inner shadow">
-                                <div className="carousel-item active" data-bs-interval="10000">
-                                    <img src={image0} className="d-block w-100 opacyti-img" alt="..." />
-                                </div>
-                                <div className="carousel-item" data-bs-interval="2000">
-                                    <img src={image1} className="d-block w-100" alt="..." />
-
-                                </div>
-                                <div className="carousel-item">
-                                    <img src={image2} className="d-block w-100" alt="..." />
-
-                                </div>
-                            </div>
-                            <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-                                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span className="visually-hidden">Previous</span>
-                            </button>
-                            <button className="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-                                <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span className="visually-hidden">Next</span>
-                            </button>
-                        </div> */}
                         <div class="container-fluid p-0 mb-5">
                             <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
                                 <div class="carousel-inner">
@@ -82,8 +54,8 @@ export default function HomePage() {
                                         <img class="w-100" src={image0} alt="Image" />
                                         <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                             <div class="p-3" >
-                                                <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown">try living</h6>
-                                                <h1 class="display-3 text-white mb-4 animated slideInDown">Make your house become your home</h1>
+                                                <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown">Trải nghiệm</h6>
+                                                <h1 class="display-3 text-white mb-4 animated slideInDown">Mô hình dãy trọ hiện đại</h1>
                                             </div>
                                         </div>
                                     </div>
@@ -91,8 +63,8 @@ export default function HomePage() {
                                         <img class="w-100 opacyti-img" src={image1} alt="Image" />
                                         <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                             <div class="p-3" >
-                                                <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown">try living</h6>
-                                                <h1 class="display-3 text-white mb-4 animated slideInDown">Simple, convenient room rental solution for everyone!</h1>
+                                                <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown">Trải nghiệm</h6>
+                                                <h1 class="display-3 text-white mb-4 animated slideInDown">Không gian rộng rãi, tiện nghi</h1>
                                             </div>
                                         </div>
                                     </div>
@@ -100,8 +72,8 @@ export default function HomePage() {
                                         <img class="w-100 opacyti-img" src={image2} alt="Image" />
                                         <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                             <div class="p-3" >
-                                                <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown">try living</h6>
-                                                <h1 class="display-3 text-white mb-4 animated slideInDown">Rent a room, create new space for your life!</h1>
+                                                <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown">trãi nghiệm</h6>
+                                                <h1 class="display-3 text-white mb-4 animated slideInDown">Chất lượng anh ninh dãy trọ</h1>
                                             </div>
                                         </div>
                                     </div>
@@ -123,7 +95,7 @@ export default function HomePage() {
                             <div class="container-xxl pb-5">
                                 <div class="container">
                                     <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                                        <h1 class="mb-5">Khám phá <span class="text-primary text-uppercase">dãy phòng</span></h1>
+                                        <h1 class="mb-5">Thông tin <span class="text-primary text-uppercase">các phòng</span></h1>
                                     </div>
                                     <div class="row g-4">
                                         {itemToShow.filter((item) => {
@@ -166,17 +138,9 @@ export default function HomePage() {
                                     <div className='row p-2 mt-2'>
                                         <Link className='text-center fs-5 btn' to={'/room'}>Xem thêm...</Link>
                                     </div>
-                                    {/* <div className='row p-2 mt-2'>
-                                        {showAll ?
-                                            <button className='text-center fs-5 btn delay-1' onClick={() => setShowAll(false)} to={'/room'}>Ẩn bớt...</button>
-                                            :
-                                            <button className='text-center fs-5 btn delay-1' onClick={() => setShowAll(true)} to={'/room'}>Xem thêm...</button>
-                                        }
-                                    </div> */}
                                 </div>
                             </div>
                         </div>
-                        {/* <CardPreview /> */}
                     </div >
                 </div >
                 <NewsPage />

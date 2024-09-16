@@ -12,6 +12,7 @@ const expenseController = {
             .populate('contract')
             .populate('room')
             .populate('user')
+            .populate('costOfElect')
             .then(expenses => res.json({ expenses }))
             .catch(next)
     },

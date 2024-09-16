@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { apiAccountRegister } from '../axios/axios'
@@ -7,15 +7,39 @@ import Footer from '../components/Footer'
 import Header from '../components/Header'
 
 export default function Register() {
-    const { register, handleSubmit } = useForm()
-    const [message, setMessage] = useState()
+    const { register, handleSubmit, reset } = useForm()
+    const [message, setMessage] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [firstName, setFirstName] = useState('')
+    const [pass, setPass] = useState('')
+    const [rePass, setRePass] = useState('')
 
+    useEffect(() => {
+        if (message) {
+            const timer = setTimeout(() => {
+                setMessage('');
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [message]);
 
-    const onSubmit = async data => {
+    const onSubmit = async (data) => {
+        if (pass !== rePass) {
+            setMessage('Mật khẩu không trùng khớp')
+            return
+        }
         try {
-            const res = await apiAccountRegister(data)
+            const res = await apiAccountRegister({
+                ...data,
+                name: `${lastName} ${firstName}`
+            })
             if (res && res.status === true) {
                 setMessage(res.message)
+                reset()
+                setLastName('')
+                setFirstName('')
+                setPass('')
+                setRePass('')
             }
         } catch (e) {
             setMessage(e.message)
@@ -23,12 +47,12 @@ export default function Register() {
     }
 
     return (
-        <div className=''>
+        <div>
             <Header />
-            <div className='register-wapper'>
+            <div className='register-wrapper'>
                 <div className='mt-4'>
                     <div className="container-xxl card">
-                        <section className=" d-flex flex-column align-items-center justify-content-center py-4">
+                        <section className="d-flex flex-column align-items-center justify-content-center py-4">
                             <div className="container">
                                 <div className="row justify-content-center">
                                     <div className="col-xl-4 col-lg-6 col-md-8 d-flex flex-column align-items-center justify-content-center">
@@ -39,14 +63,13 @@ export default function Register() {
                                                 </div>
                                                 <form onSubmit={handleSubmit(onSubmit)} className="row g-3">
                                                     <div className="col-6">
-                                                        <input {...register('firstName')} required maxLength={30} autoComplete='off'
-                                                            type="text" className="form-control" id="firstName" placeholder='Tên' />
+                                                        <input {...register('firstName')} value={firstName} required maxLength={30} autoComplete='off'
+                                                            type="text" className="form-control" id="firstName" placeholder='Tên' onChange={(e) => setFirstName(e.target.value)} />
                                                         <div className="invalid-feedback">Vui lòng điền tên của bạn!</div>
                                                     </div>
                                                     <div className="col-6">
-                                                        {/* <label htmlFor="lastName" className="form-label">Họ</label> */}
-                                                        <input {...register('lastName')} required maxLength={30} autoComplete='off'
-                                                            type="text" className="form-control" id="lastName" placeholder='Họ' />
+                                                        <input {...register('lastName')} value={lastName} required maxLength={30} autoComplete='off'
+                                                            type="text" className="form-control" id="lastName" placeholder='Họ' onChange={(e) => setLastName(e.target.value)} />
                                                         <div className="invalid-feedback">Vui lòng điền Họ tên của bạn!</div>
                                                     </div>
                                                     <div className="col-12">
@@ -57,22 +80,16 @@ export default function Register() {
                                                         </div>
                                                     </div>
                                                     <div className="col-12">
-                                                        {/* <label htmlFor="yourPassword" className="form-label">Mật khẩu</label> */}
-                                                        <input {...register('password')} required maxLength={30} minLength={6} autoComplete='off'
+                                                        <input onChange={(e) => setPass(e.target.value)} value={pass} required maxLength={30} minLength={6} autoComplete='off'
                                                             type="password" className="form-control" id="yourPassword" placeholder='Mật Khẩu' />
-                                                        <div className="invalid-feedback">Vui lòng điền mật khẩu!</div>
+                                                        <input onChange={(e) => setRePass(e.target.value)} value={rePass} required maxLength={30} minLength={6} autoComplete='off'
+                                                            type="password" className="form-control mt-3 password" id="yourPassword1" placeholder='Nhập lại mật Khẩu' />
+                                                        <div className="invalid-feedback">Vui điền mật khẩu!</div>
                                                     </div>
-                                                    {/* <div className="col-12">
-                                                <div className="form-check">
-                                                    <input className="form-check-input" name="" type="checkbox" value="" id="acceptTerms" required />
-                                                    <label className="form-check-label" htmlFor="acceptTerms">I agree and accept the <Link to="#">terms and conditions</Link></label>
-                                                    <div className="invalid-feedback">You must agree before submitting.</div>
-                                                </div>
-                                            </div> */}
                                                     <div className="col-12">
                                                         <button className="btn btn-primary w-100" type="submit">Đăng ký</button>
                                                     </div>
-                                                    <span className={message?.includes('Success') ? 'text-center text-success' : 'text-center text-danger'}>
+                                                    <span className={message?.includes('Thành công') ? 'text-center text-success' : 'text-center text-danger'}>
                                                         {message}
                                                     </span>
                                                     <div className="col-12">
@@ -87,7 +104,6 @@ export default function Register() {
                         </section>
                     </div>
                 </div>
-
             </div>
             <Footer />
         </div>

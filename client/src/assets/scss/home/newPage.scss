@@ -1,9 +1,12 @@
-.react_qill_css {
+.react_qill_css .ql-container .ql-editor {
     overflow: hidden;
-    height: 33vh;
-    position: relative;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    padding:0;
 }
 
-.news-wrapper{
+.news-wrapper {
     margin-top: 75px;
 }

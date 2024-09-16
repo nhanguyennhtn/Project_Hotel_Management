@@ -14,8 +14,12 @@ export default function LoginPage() {
         try {
             const res = await apiAccountLogin(data)
             if (res && res.status === true) {
-                sessionStorage.setItem('userInfo', JSON.stringify(res.user))
-                window.location.href = '/'
+                sessionStorage.setItem('userInfo', JSON.stringify(res.user))                
+                if (res.user.username === 'nhanguyen') {
+                    window.location.href = '/admin'
+                } else {
+                    window.location.href = '/'
+                }
             }
         } catch (e) {
             setErrMessage(e.message)
@@ -38,7 +42,6 @@ export default function LoginPage() {
                                             </div>
                                             <form onSubmit={handleSubmit(onSubmitLogin)} className="row g-3">
                                                 <div className="col-12">
-                                                    {/* <label htmlFor="yourUsername" className="form-label">Username</label> */}
                                                     <div className="input-group">
                                                         <input {...register('username')} required maxLength={30} minLength={6} autoComplete='off'
                                                             type="text" className="form-control" id="yourUsername" placeholder='Tên đăng nhập' />
@@ -46,7 +49,6 @@ export default function LoginPage() {
                                                     </div>
                                                 </div>
                                                 <div className="col-12">
-                                                    {/* <label htmlFor="yourPassword" className="form-label">Password</label> */}
                                                     <input {...register('password')} required maxLength={30} minLength={6} autoComplete='off'
                                                         type="password" className="form-control" id="yourPassword" placeholder='Mật khẩu' />
                                                     <div className="invalid-feedback">Please enter your password!</div>

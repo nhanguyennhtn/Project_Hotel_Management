@@ -56,6 +56,11 @@ export default function ContentMenu() {
                             <i class="bi bi-droplet-fill"></i> Điện nước phòng
                         </Link>
                     </li>
+                    <li class="nav-item">
+                        <Link class="nav-link" to="/admin/camera">
+                        <i class="bi bi-webcam-fill"></i> Camera
+                        </Link>
+                    </li>
 
                 </ul>
             </div>

@@ -129,3 +129,15 @@ export const apiReviewsUpdate = data =>
 
 export const apiReviewsDelete = id =>
     axiosClient.delete('/api/reviews/delete/' + id)
+//costOfElect
+export const apiCostOfElectsCreate = data =>
+    axiosClient.post('/api/costOfElect/create', data)
+
+export const apiCostOfElectsRead = () =>
+    axiosClient.get('/api/costOfElect/read')
+
+export const apiCostOfElectsUpdate = data =>
+    axiosClient.put(`/api/costOfElect/update/${data._id}`, data)
+
+export const apiCostOfElectsDelete = id =>
+    axiosClient.delete('/api/costOfElect/delete/' + id)

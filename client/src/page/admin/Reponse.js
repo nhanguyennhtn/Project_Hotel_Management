@@ -8,9 +8,6 @@ export default function Reponse() {
     const [motels, setMotels] = useState([])
     const [users, setUser] = useState([])
 
-
-
-
     useEffect(() => {
         fetchData()
     }, [])
