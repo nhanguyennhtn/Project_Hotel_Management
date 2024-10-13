@@ -47,6 +47,8 @@ import AdminResponseNews from './page/admin/ReponseNews.js'
 import Camera from './page/admin/webcam/index.js';
 import CostOfElect from './page/admin/expenses/costOfElect/index.js';
 
+import CameraPage from './page/camera/index.js'
+
 const root = ReactDOM.createRoot(document.getElementById('root'))
 
 root.render(
@@ -57,8 +59,6 @@ root.render(
         <Route path='/room' element={<MotelPage />} />
         <Route path='/room/phong-don' element={<MotelSinglePage />} />
         <Route path='/room/phong-ghep' element={<MotelDoublePage />} />
-        <Route path='/room/:id' element={
-          JSON.parse(window.sessionStorage.getItem('userInfo')) ? <RoomDetail /> : <Login />} />
         <Route path='/news' element={<NewsPage />} />
         <Route path='/news/create' element={< NewsPageCreate />} />
         <Route path='/contact' element={<ContacPage />} />
@@ -68,6 +68,8 @@ root.render(
         <Route path='/user/bill' element={<UserBill />} />
         <Route path='/login' element={<Login />} />
         <Route path='/register' element={<Register />} />
+        <Route path='/room/:id' element={
+          JSON.parse(window.sessionStorage.getItem('userInfo')) ? <RoomDetail /> : <Login />} />
         
         <Route path='/admin' element={
           JSON.parse(window.sessionStorage.getItem('userInfo'))?.username === 'nhanguyen'
@@ -123,6 +125,10 @@ root.render(
         <Route path='/admin/costOfElects' element={
           JSON.parse(window.sessionStorage.getItem('userInfo'))?.username === 'nhanguyen'
             ? <CostOfElect /> : <Login />} />
+
+        <Route path='/camera' element={
+          JSON.parse(window.sessionStorage.getItem('userInfo'))?.role === 2
+            ? <CameraPage /> : <Login />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>

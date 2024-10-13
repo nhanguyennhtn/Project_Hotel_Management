@@ -34,7 +34,7 @@ export default function Admin() {
         const itemDate = new Date(item.createdAt);
         const currentDate = new Date();
         return itemDate.getMonth() === currentDate.getMonth() &&
-            itemDate.getFullYear() === currentDate.getFullYear();
+            itemDate.getFullYear() <= currentDate.getFullYear();
     });
     const deleteProduct = async id => {
         if (true) {
@@ -51,8 +51,26 @@ export default function Admin() {
     const createExpenses = contractvalue?.filter((item) => {
         return item.room.title === valueIn && item.user?.fullname === valueOut
     })
+    const formatOther = (value) => {
+        const paserValue = parseFloat(value)
+        if (paserValue <= 0) {
+            return '0'
+        }
+        return paserValue
+    }
 
-    console.log(expensed);
+    const Total = (item) => {
+        const electricValue = Intl.NumberFormat('vi-VN').format(item.electricEnd - item.electricStart)
+        const waterValue = Intl.NumberFormat('vi-VN').format(item.WaterEnd - item.WaterStart)
+        const otherValue = Intl.NumberFormat('vi-VN', {minimumFractionDigits: 3, maximumFractionDigits: 3}).format(formatOther(item.Other))
+        const resultValue = Intl.NumberFormat('vi-VN', {minimumFractionDigits: 3, maximumFractionDigits: 3}).format(electricValue * costOfElect[0].costOfElectricity + waterValue * costOfElect[0].costOfWater + parseFloat(otherValue))
+        return {
+            electric: electricValue,
+            water: waterValue,
+            other: otherValue,
+            result: resultValue
+        }
+    }
 
     return (
         <div className='wrapper'>
@@ -64,7 +82,8 @@ export default function Admin() {
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                             <h1 class="h4 ms-4">Điện nước phòng</h1>
                             <div className='btn-toolbar mb-2 mx-4 '>
-                                <div class="btn-group me-2">
+                                <div class="btn-group me-2 gap-2 ">
+                                    <Link to={'/admin/costOfElects'} class="btn btn-sm btn-outline-secondary">Bảng giá </Link>
                                     <Link to={'/admin/expense/export'} class="btn btn-sm btn-outline-secondary"><i class="bi bi-reply-all-fill"></i> Export  </Link>
 
                                 </div>
@@ -142,19 +161,16 @@ export default function Admin() {
                                                             <td>{item?.user?.fullname}</td>
                                                             <td>
                                                                 <div className='row'>
-                                                                    <span className='col text-center'>{Intl.NumberFormat('vi-VN').format(item.electricEnd - item.electricStart)}</span>
+                                                                    <span className='col text-center'>{Total(item).electric}</span>
                                                                 </div>
                                                             </td>
                                                             <td>
                                                                 <div className='row'>
-                                                                    <span className='col text-center'>{Intl.NumberFormat('vi-VN').format(item.WaterEnd - item.WaterStart)}</span>
+                                                                    <span className='col text-center'>{Total(item).water}</span>
                                                                 </div>
                                                             </td>
-                                                            <td>{item.Other <= 0 ? '0' : Intl.NumberFormat('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).format((parseFloat(item.Other)))}</td>
-                                                            <td>{
-                                                                Intl.NumberFormat('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).format(costOfElect[0]?.costOfElectricity * (item.electricEnd - item.electricStart) +
-                                                                    costOfElect[0]?.costOfWater * (item.WaterEnd - item.WaterStart) )
-                                                            } VNĐ</td>
+                                                            <td>{Total(item).other}</td>
+                                                            <td>{Total(item).result} VNĐ</td>
                                                             <td>{item.date}</td>
                                                             <td>
                                                                 {item.status === true ?
@@ -214,7 +230,7 @@ export default function Admin() {
                                                         <p><strong>Điện: </strong></p>
                                                     </div>
                                                     <div className='col'>
-                                                        <p>{currentForm.electricEnd - currentForm.electricStart}</p>
+                                                        <p>{Total(currentForm).electric}</p>
                                                     </div>
                                                     <div className='col'>
                                                         <p>
@@ -229,13 +245,26 @@ export default function Admin() {
                                                         <p><strong>Nước:</strong></p>
                                                     </div>
                                                     <div className='col'>
-                                                        <p>{currentForm.WaterEnd - currentForm.WaterStart}</p>
+                                                        <p>{Total(currentForm).water}</p>
                                                     </div>
                                                     <div className='col '>
                                                         <p>
                                                             {Intl.NumberFormat('vi-VN', { minimumFractionDigits: 3, maximumFractionDigits: 3 }).format(
                                                                 (parseFloat(currentForm.WaterEnd) - parseFloat(currentForm.WaterStart)) * parseFloat(costOfElect[0].costOfWater)
                                                             )}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className='row border-bottom mb-2'>
+                                                    <div className='col'>
+                                                        <p><strong>Khác: </strong></p>
+                                                    </div>
+                                                    <div className='col'>
+                                                        <p>{currentForm.desc}</p>
+                                                    </div>
+                                                    <div className='col '>
+                                                        <p>
+                                                            {Total(currentForm).other}
                                                         </p>
                                                     </div>
                                                 </div>

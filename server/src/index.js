@@ -12,6 +12,6 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 5
 
 app.use(cors())
 route(app)
-
+    
 const PORT = 3535
 app.listen(PORT, () => console.log('App listening at http://localhost:' + PORT))

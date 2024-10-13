@@ -1,38 +1,17 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import Webcam from 'react-webcam';
-import axios from 'axios'
+import React, { useState } from 'react'
 import AdminHeader from '../components/Header'
 import ContentMenu from '../components/ContentMenu'
+import CustomerRegister from './customerRegister'
+import ListStaff from './listStaff'
+import InfoVehicle from './infoVehicle'
+import CardVehicle from './cardVehicle'
 
 export default function Camera() {
-  const webcamRef = useRef(null);
-  const [apiResponse, setApiResponse] = useState(null);
-  const [capturing, setCapturing] = useState(true)
+  const [activeComponent, setActiveComponent] = useState(null)
 
-  // const capture = React.useCallback(() => {
-  //   const imageSrc = webcamRef.current.getScreenshot();
-  //   sendImageToAPI(imageSrc);
-  // }, [webcamRef]);
-  // useEffect(() => {
-  //   if (capturing) {
-  //     const interval = setInterval(() => {
-  //       capture()
-  //     }, 200)
-  //     return () => clearInterval(interval)
-  //   }
-  // }, [apiResponse])
-
-  // const capture = useCallback(() => {
-  //   const imageSrc = webcamRef.current.getScreenshot();
-  //   axios.post('https://b318-35-231-139-175.ngrok-free.app/api/webcam-model', { image: imageSrc })
-  //     .then(response => {
-  //       setApiResponse(response.data);
-  //       console.log(response.data);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error sending image to API:', error);
-  //     });
-  // }, [webcamRef])
+  const handleClick = (component) => {
+    setActiveComponent(component)
+  }
 
   return (
     <div className='content-reponse'>
@@ -46,33 +25,33 @@ export default function Camera() {
                 <h1 class="h4 ms-4">Camera</h1>
               </div>
               <div className=' m-2 card'>
-                <div className='row d-flex p-1'>
-                  <div className='col '>
-                    <label>video Camera</label>
-                    <div className='card mt-2' style={{ height: '450px' }}>
-                    </div>
+                <div className='d-flex gap-2 justify-content-center'>
+                  <div className={`card p-2 my-2 btn-primary px-3 rounded-3 btn ${activeComponent === 'staff' ? 'active' : ''}`} onClick={() => handleClick('staff')}>
+                    Nhân viên bãi xe
                   </div>
-                  <div className='col'>
-                    <label>Ảnh ghi nhận</label>
-                    <div className='row card mt-2 w-100 '>
-                      <div className='row d-flex gap-2 '>
-                        <div className='card col-3' style={{ height: '100px' }}>
-                          Ảnh getScreenshot
-                        </div>
-                        <div className='card col'>
-                          <label>biển số xe</label>
-                          <label>thời gian</label>
-                        </div>
-                        <div className='col-1 text=-center'>
-                        <i class="bi bi-trash3-fill text-primary fs-5"></i>
-                        </div>
-                      </div>
-
-                    </div>
+                  <div className={`card p-2 my-2 btn-primary px-3 rounded-3 btn ${activeComponent === 'cusRegister' ? 'active' : ''}`} onClick={() => { handleClick('cusRegister') }}>
+                    khách đăng ký
+                  </div>
+                  <div className={`card p-2 my-2 btn-primary px-3 rounded-3 btn ${activeComponent === 'infoVehicle' ? 'active' : ''}`} onClick={() => { handleClick('infoVehicle') }}>
+                    thông tin xe
+                  </div>
+                  <div className={`card p-2 my-2 btn-primary px-3 rounded-3 btn ${activeComponent === 'historyVehicle' ? 'active' : ''}`} onClick={() => { handleClick('historyVehicle') }}>
+                    Lịch sử xe (ra/vào)
+                  </div>
+                  <div className={`card p-2 my-2 btn-primary px-3 rounded-3 btn ${activeComponent === 'currentVehicle' ? 'active' : ''}`} onClick={() => { handleClick('currentVehicle') }}>
+                    Xe trong bãi
+                  </div>
+                  <div className={`card p-2 my-2 btn-primary px-3 rounded-3 btn ${activeComponent === 'cardVehicle' ? 'active' : ''}`} onClick={() => { handleClick('cardVehicle') }}>
+                    Thẻ xe
                   </div>
                 </div>
               </div>
-
+              <div className='m-2'>
+                {activeComponent === 'staff' && <ListStaff />}
+                {activeComponent === 'cusRegister' && <CustomerRegister />}
+                {activeComponent === 'infoVehicle' && <InfoVehicle />}
+                {activeComponent === 'cardVehicle' && <CardVehicle />}
+              </div>
             </main>
           </div>
         </div>

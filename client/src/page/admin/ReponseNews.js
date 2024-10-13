@@ -4,6 +4,7 @@ import ContentMenu from './components/ContentMenu'
 import { apiMotelsRead, apiNewsDelete, apiNewsRead, apiNewsUpdate } from '../../axios/axios'
 import ReactQuill from 'react-quill'
 import '../../assets/scss/home/Home.scss'
+import 'react-quill/dist/quill.bubble.css';
 
 export default function Reponse() {
     const [motels, setMotels] = useState([])
@@ -65,7 +66,7 @@ export default function Reponse() {
                                     }).map((item, index) => <tr>
                                         <th scope="row">{++index}</th>
                                         <td>{item.user.fullname}</td>
-                                        <td><ReactQuill theme="bubble" value={item.desc} readOnly={true} className='react_qill_css'/></td>
+                                        <td><ReactQuill theme="bubble" value={item.desc} readOnly={true}/></td>
                                         <td>{item.date}</td>
                                         <td>{item.img.map((img) =>
                                             <img style={{ width: 200, height: 100, objectFit: 'cover' }} src={img.preview} alt='' />

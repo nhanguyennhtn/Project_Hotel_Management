@@ -68,7 +68,7 @@ export default function Create() {
                                                 </div>
                                                 <div className="mb-3">
                                                     <label htmlFor="descCreate" className="form-label">Description</label>
-                                                    <ReactQuill theme="snow" value={value} onChange={setValue} />
+                                                    <ReactQuill theme="snow" value={value} onChange={setValue} style={{height: 'auto'}}/>
                                                     {/* <textarea required defaultValue={product.desc} {...register('desc', { required: true })} className="form-control" id="descCreate" rows="3" placeholder='Description'></textarea> */}
                                                 </div>
                                                 <div className="mb-3">

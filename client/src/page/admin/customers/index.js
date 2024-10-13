@@ -83,7 +83,7 @@ export default function Customers() {
                                             <tr key={item._id}>
                                                 <td>{++index}</td>
                                                 <td>{item.fullname}</td>
-                                                <td>{item.room.title}</td>
+                                                <td>{item.room?.title}</td>
                                                 <td>{item.phone}</td>
                                                 <td>{item.date}</td>
                                                 <td>{item.status ?
@@ -91,7 +91,7 @@ export default function Customers() {
                                                     :
                                                     <p className="text-secondary">Đã trả phòng</p>
                                                 }</td>
-                                                <td><Link to={'/admin/customers/Detail'} state={item} className="btn btn-outline-primary mb-4" >Chi tiết</Link></td>
+                                                <td><Link to={'/admin/customers/Detail'} state={item} className="btn btn-outline-primary mb-4 border-0 fs-6"  ><i class="bi bi-info-circle "></i></Link></td>
                                             </tr>
                                         )
                                     })}

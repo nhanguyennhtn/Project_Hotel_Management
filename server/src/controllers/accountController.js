@@ -18,7 +18,7 @@ const accountController = {
                 const createUser = new model(req.body)
                 await createUser.save()
                     .then(() => {
-                        res.status(200).json({ status: true, message: 'Đăng ký thành công'})
+                        res.status(200).json({ status: true, message: 'Đăng ký thành công' })
                     })
                     .catch(next)
             })
@@ -35,9 +35,9 @@ const accountController = {
                 if (password !== user.password) {
                     res.status(400).json({ status: false, message: `Mật khẩu không chính xác` })
                 }
-                res.status(200).json({ status: true, user})
+                res.status(200).json({ status: true, user })
             })
-            .catch(next)    
+            .catch(next)
     }
 }
 

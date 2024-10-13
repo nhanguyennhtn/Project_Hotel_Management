@@ -1,0 +1,51 @@
+GET http://localhost:3535/api/XeVao/66-L1 580.07
+
+
+POST http://localhost:3535/api/costList/create
+Content-Type: application/json
+
+{
+    "trongngay": "5000",
+    "quadem": "10000",
+    "goithang": "300000",
+    "ngaylap_G": "2024-10-07"
+}
+
+
+# [
+#     {
+#         "_id": "1",
+#         "ten_the": "Thẻ A",
+#         "noidung_the": "Thông tin thẻ A",
+#         "trangthai_the": "Hoạt động",
+#         "ngaylap_the": "2023-09-01"
+#     },
+#     {
+#         "_id": "2",
+#         "ten_the": "Thẻ B",
+#         "noidung_the": "Thông tin thẻ B",
+#         "trangthai_the": "Ngưng hoạt động",
+#         "ngaylap_the": "2023-09-02"
+#     },
+#     {
+#         "_id": "3",
+#         "ten_the": "Thẻ C",
+#         "noidung_the": "Thông tin thẻ C",
+#         "trangthai_the": "Hoạt động",
+#         "ngaylap_the": "2023-09-03"
+#     },
+#     {
+#         "_id": "4",
+#         "ten_the": "Thẻ D",
+#         "noidung_the": "Thông tin thẻ D",
+#         "trangthai_the": "Hoạt động",
+#         "ngaylap_the": "2023-09-04"
+#     },
+#     {
+#         "_id": "5",
+#         "ten_the": "Thẻ E",
+#         "noidung_the": "Thông tin thẻ E",
+#         "trangthai_the": "Ngưng hoạt động",
+#         "ngaylap_the": "2023-09-05"
+#     }
+# ]

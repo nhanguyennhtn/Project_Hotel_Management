@@ -10,7 +10,7 @@ const motelController = {
 
     read: (req, res, next) => {
         model.find()
-            .populate('username', 'username')
+            .populate('username')
             .populate('room')
             .populate('contract')
             .then(user => res.json({ user }))

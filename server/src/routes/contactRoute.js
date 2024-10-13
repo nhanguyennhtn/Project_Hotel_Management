@@ -4,7 +4,7 @@ const controller = require('../controllers/contactController')
 
 const router = express.Router()
 
-const route = app => {
+const route = (app) => {
     router.post('/create', controller.create)
     router.get('/read', controller.read)
     router.put('/update/:id', controller.update)

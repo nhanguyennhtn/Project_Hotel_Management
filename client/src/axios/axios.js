@@ -141,3 +141,6 @@ export const apiCostOfElectsUpdate = data =>
 
 export const apiCostOfElectsDelete = id =>
     axiosClient.delete('/api/costOfElect/delete/' + id)
+
+export const apiStaffsUpdate = data =>
+    axiosClient.put(`/api/admin/updateStaff/${data._id}`, data)

@@ -17,6 +17,8 @@ export default function LoginPage() {
                 sessionStorage.setItem('userInfo', JSON.stringify(res.user))                
                 if (res.user.username === 'nhanguyen') {
                     window.location.href = '/admin'
+                } else if (res.user.role === 2) {
+                    window.location.href = '/camera'
                 } else {
                     window.location.href = '/'
                 }

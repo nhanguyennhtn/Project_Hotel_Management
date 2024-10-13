@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import AdminHeader from './components/Header'
 import ContentMenu from './components/ContentMenu'
-import { apiBillCreate, apiContractsCreate, apiMotelsRead, apiMotelsUpdate, apiUsersDelete, apiUsersRead } from '../../axios/axios'
-import { Link, useNavigate } from 'react-router-dom'
+import {  apiContractsCreate, apiMotelsRead, apiMotelsUpdate, apiUsersDelete, apiUsersRead } from '../../axios/axios'
 
 export default function Reponse() {
     const [motels, setMotels] = useState([])
@@ -92,19 +91,19 @@ export default function Reponse() {
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">title</th>
-                                        <th scope="col">price</th>
-                                        <th scope="col">fullname</th>
-                                        <th scope="col">phoneNumber</th>
-                                        <th scope="col">Identity Card</th>
-                                        <th scope="col">minhchung</th>
-                                        <th scope="col">Date</th>
-                                        <th scope="col">status</th>
+                                        <th scope="col">Phòng</th>
+                                        <th scope="col">Giá</th>
+                                        <th scope="col">Họ và tên</th>
+                                        <th scope="col">Số điện thoại</th>
+                                        <th scope="col">Căn cước công dân</th>
+                                        <th scope="col">minh chứng</th>
+                                        <th scope="col">Ngày</th>
+                                        <th scope="col">Trạng thái</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {users.filter(item => {
-                                        return (item?.room.status === false && item.status === null) && item
+                                        return (item?.room?.status === false && item.status === null) && item
                                     }).length > 0 ?
                                         users.filter(item => {
                                             return (item?.room.status === false && item.status === null) && item
@@ -117,7 +116,7 @@ export default function Reponse() {
                                             <td>{item.IDcard}</td>
                                             <td><img style={{ width: 200, height: 100, objectFit: 'cover' }} src={item.prove} alt='' /></td>
                                             <td>{item.date}</td>
-                                            <td>{item.status
+                                            <td>{item?.status
                                                 ? <div className='mb-3'>
                                                     <button className="btn" disabled>Đã được đặt</button>
                                                     <button onClick={() => handleCancel(item)} className='btn btn-outline-danger ms-3'>Hủy đặt phòng</button>

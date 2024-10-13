@@ -16,7 +16,7 @@ const User = new Schema({
     dateStart: {type: String},
     dateEnd: {type: String},
     rentalDeposit: {type: String},
-    prove: {type: String},
+    prove: {type: String},  
     desc: {type: String},
     date: {type: String},
     status: {type: Boolean}

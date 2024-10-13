@@ -1,14 +1,11 @@
 const mongoose = require('mongoose')
 
-const urlMongodb = 'mongodb://localhost:27017/motel-main-project'
+const urlMongodb = 'mongodb://127.0.0.1:27017/motel-main-project'
 
-const connectDB = () => {
+const connectDB = async () => {
     try {
         mongoose.set('strictQuery', false)
-        mongoose.connect(urlMongodb, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        })
+        await mongoose.connect(urlMongodb)
         console.log('Connect successfully!')
     } catch (error) {
         console.log('Connect failure!')

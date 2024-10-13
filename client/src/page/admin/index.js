@@ -9,18 +9,31 @@ import Table from './components/expense/Table'
 export default function Admin() {
     const [customers, setCustomers] = useState([])
     const [Contracts, setContracts] = useState([])
+    const [successMessage, setSuccessMessage] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         fetchData()
     }, [])
 
+    useEffect(() => {
+        if (successMessage || errorMessage) {
+            const timer = setTimeout(() => {
+                setSuccessMessage('');
+                setErrorMessage('');
+            }, 3000);
+            return () => clearTimeout(timer);
+        }
+    }, [successMessage, errorMessage]);
+
+
     const fetchData = async () => {
         const res = await apiUsersRead()
         const contract = await apiContractsRead()
         setContracts(contract.contracts)
-        console.log(Contracts);
         setCustomers(res.user)
     }
+
     const handleConfirm = async (data) => {
         if (window.confirm('Are you sure?')) {
             // await apiMotelsUpdate({ _id: data.room._id, status: true })
@@ -29,15 +42,16 @@ export default function Admin() {
     }
 
     const handleCancel = async (data) => {
-        if (window.confirm('Are you sure?')) {
-            await apiMotelsUpdate({ _id: data.room._id, status: null })
+        if (window.confirm('Xác nhận hủy phòng và ngưng hợp đồng?ee')) {
             Contracts?.filter((item) => {
-                return item.user._id === data._id && item.status == true
-            })?.map(async (item) => (
-                await apiContractsUpdate({ _id: item._id, status: false })
-            ))
-            const res = await apiUsersUpdate({ _id: data._id, status: false })
+                return item._id === data.contract._id && item?.status === true
+            })?.map(async (item) => {
+                await apiMotelsUpdate({ _id: data?.room._id, status: null })
+                await apiContractsUpdate({ _id: item?._id, status: false })
+                await apiUsersUpdate({ _id: data?._id, status: false })
+            })
             fetchData()
+            setSuccessMessage('Hủy thành công')
         }
     }
     return (
@@ -50,31 +64,33 @@ export default function Admin() {
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                             <h1 class="h4 ms-4">Danh sách phòng hoạt động</h1>
                         </div>
+                        {successMessage && <div className="alert alert-success custom-alert">{successMessage}</div>}
+                        {errorMessage && <div className="alert alert-danger custom-alert">{errorMessage}</div>}
                         <div className='container-md'>
                             <table class="table container-md my-4 shadow">
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">title</th>
-                                        <th scope="col">price</th>
-                                        <th scope="col">fullname</th>
-                                        <th scope="col">phoneNumber</th>
-                                        <th scope="col">Identity Card</th>
+                                        <th scope="col">Phòng</th>
+                                        <th scope="col">Giá</th>
+                                        <th scope="col">Họ và tên</th>
+                                        <th scope="col">số điện thoại</th>
+                                        <th scope="col">Căn cước công dân</th>
                                         {/* <th scope="col">minhchung</th> */}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {customers?.length > 0 ? customers.filter((item) => {
-                                        return item.status === true && item
+                                    {customers?.length > 0 ? customers?.filter((item) => {
+                                        return item.status === true && item.contract?.status === true
                                     }).map((item, index) => <tr>
                                         <th scope="row">{++index}</th>
-                                        <td>{item.room.title}</td>
-                                        <td>{item.room.price}</td>
+                                        <td>{item.room?.title}</td>
+                                        <td>{item.room?.price}</td>
                                         <td>{item.fullname}</td>
                                         <td>{item.phone}</td>
                                         <td>{item.IDcard}</td>
                                         {/* <td><img style={{ width: 300, height: 100, objectFit: 'cover' }} src={item.minhchung} alt='' /></td> */}
-                                        <td>{item.status
+                                        <td>{item?.status
                                             ? <div className='mb-3'>
                                                 <button onClick={() => handleCancel(item)} className='btn btn-outline-danger ms-3'>Hủy đặt phòng</button>
                                             </div>
@@ -107,19 +123,19 @@ export default function Admin() {
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">title</th>
-                                        <th scope="col">price</th>
-                                        <th scope="col">fullname</th>
-                                        <th scope="col">phoneNumber</th>
-                                        <th scope="col">Identity Card</th>
-                                        <th scope="col">minhchung</th>
-                                        <th scope="col">Date</th>
-                                        <th scope="col">status</th>
+                                        <th scope="col">Phòng</th>
+                                        <th scope="col">Giá</th>
+                                        <th scope="col">Họ và tên</th>
+                                        <th scope="col">Số điện thoại</th>
+                                        <th scope="col">Căn cước công dân</th>
+                                        <th scope="col">minh chứng</th>
+                                        <th scope="col">Ngày</th>
+                                        <th scope="col">Trạng thái</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {customers?.length > 0 && customers.filter(item => {
-                                        return (item?.room.status === false && item.status === null) && item
+                                        return (item?.room?.status === false && item?.status === null) && item
                                     })?.map((item, index) => <tr>
                                         <th scope="row">{++index}</th>
                                         <td>{item.room.title}</td>
