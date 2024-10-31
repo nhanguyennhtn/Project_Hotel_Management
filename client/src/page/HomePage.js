@@ -72,7 +72,7 @@ export default function     HomePage() {
                                         <img class="w-100 opacyti-img" src={image2} alt="Image" />
                                         <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                             <div class="p-3" >
-                                                <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown">trãi nghiệm</h6>
+                                                <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown">Trải nghiệm</h6>
                                                 <h1 class="display-3 text-white mb-4 animated slideInDown">Chất lượng anh ninh dãy trọ</h1>
                                             </div>
                                         </div>

@@ -20,6 +20,7 @@ export default function Rooms() {
 
     const renderButton = (item) => {
         if (item.status === null || item.status === undefined) {
+            
             return <Link class="btn btn-sm btn-dark rounded py-2 px-4" to={'/bill'} state={item} >Đặt phòng</Link>
 
         } else if (item.status === true) {

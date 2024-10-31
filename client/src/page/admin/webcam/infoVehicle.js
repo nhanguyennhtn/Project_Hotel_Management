@@ -11,6 +11,7 @@ export default function InfoVehicle() {
     const [newVehicle, setNewVehicle] = useState({
         biensoxe_TTX: '', anhxe_TTX: '', tenxe_TTX: '', ngaytao_TTX: '', trangthai: 'hoatdong'
     });
+    const [customers,setCustomers] = useState([])
 
     useEffect(() => {
         fetchVehicles();
@@ -30,10 +31,17 @@ export default function InfoVehicle() {
         try {
             const response = await axios.get('http://localhost:3535/api/infoVehicles/read');
             setInfoVehicles(response.data.infoVehicle);
+            const res = await axios.get('http://localhost:3535/api/registerVehicles/read')
+            setCustomers(res.data.registerVehicle)
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     };
+    console.log(customers);
+    const infoCustomer = (cus) => {
+        const filterCusomer = customers.find(item => item.ma_TTX._id === cus._id)
+        return filterCusomer?.user?.fullname
+    }
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -96,7 +104,7 @@ export default function InfoVehicle() {
                                     <td>{item.tenxe_TTX}</td>
                                     <td><img src={item.anhxe_TTX} alt="anh" /></td>
                                     <td>{item.ngaytao_TTX}</td>
-                                    <td>{++index}</td>
+                                    <td>{infoCustomer(item)}</td>
                                 </tr>
                             )
                         }) : ""}

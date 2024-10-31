@@ -9,6 +9,7 @@ const route = (app) => {
     router.post('/admin/addStaff', controller.AddStaff)
     router.put('/admin/updateStaff/:id', controller.updateStaff)
     router.get('/tinhtien_xera', controller.Tinhtien)
+    router.get('/chart-xera', controller.get_chart_data)
 
     return app.use('/api', router)
 }

@@ -1,15 +1,25 @@
-GET http://localhost:3535/api/XeVao/66-L1 580.07
+GET http://localhost:3535/api/chart-xera
 
-
-POST http://localhost:3535/api/costList/create
-Content-Type: application/json
+Content-Type: j
 
 {
-    "trongngay": "5000",
-    "quadem": "10000",
-    "goithang": "300000",
-    "ngaylap_G": "2024-10-07"
+    "month": ,
+"year": ,
+"start_date": "2024-10-01",
+"end_date": "2024-10-22",
+"plate": 
 }
+
+PUT http://localhost:3535/api/cardVehicles/update/6701a798c614b7f58e430e89
+
+
+
+# {
+#     "trongngay": "5000",
+#     "quadem": "10000",
+#     "goithang": "300000",
+#     "ngaylap_G": "2024-10-07"
+# }
 
 
 # [

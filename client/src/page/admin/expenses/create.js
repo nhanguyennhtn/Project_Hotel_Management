@@ -96,14 +96,14 @@ function Create() {
                                             <div className="mb-3">
                                                 <label htmlFor="electric" className="form-label mx-3">Điện</label>
                                                 <div className='d-flex gap-2'>
-                                                <input autoComplete='off' required {...registerCreate('electricStart')} defaultValue={expense[0]?.electricEnd} type="number"  className="form-control " id="electric" placeholder="Chỉ số đầu" />
+                                                <input autoComplete='off' required {...registerCreate('electricStart')} value={expense[0]?.electricEnd} type="number"  className="form-control " id="electric" placeholder="Chỉ số đầu" />
                                                 <input autoComplete='off' required {...registerCreate('electricEnd')} type="number" className="form-control " id="electric1" placeholder="Chỉ số cuối" />
                                                 </div>
                                             </div>
                                             <div className="mb-3">
                                                 <label htmlFor="sizeCreate" className="form-label mx-3">Nước</label>
                                                 <div className='d-flex gap-2'>
-                                                <input autoComplete='off' required {...registerCreate('WaterStart')} defaultValue={expense[0]?.WaterEnd} type="number" className="form-control "  id="sizeCreate" placeholder="chỉ số đầu" />
+                                                <input autoComplete='off' required {...registerCreate('WaterStart')} value={expense[0]?.WaterEnd} type="number" className="form-control "  id="sizeCreate" placeholder="chỉ số đầu" />
                                                 <input autoComplete='off' required {...registerCreate('WaterEnd')} type="number" className="form-control " id="sizeCreate" placeholder="Chỉ số cuối" />
                                                 </div>
                                             </div>  

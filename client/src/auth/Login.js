@@ -14,7 +14,8 @@ export default function LoginPage() {
         try {
             const res = await apiAccountLogin(data)
             if (res && res.status === true) {
-                sessionStorage.setItem('userInfo', JSON.stringify(res.user))                
+                sessionStorage.setItem('userInfo', JSON.stringify(res.user))            
+                sessionStorage.setItem('staffInfo', res.user._id)            
                 if (res.user.username === 'nhanguyen') {
                     window.location.href = '/admin'
                 } else if (res.user.role === 2) {

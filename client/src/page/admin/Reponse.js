@@ -104,9 +104,9 @@ export default function Reponse() {
                                 <tbody>
                                     {users.filter(item => {
                                         return (item?.room?.status === false && item.status === null) && item
-                                    }).length > 0 ?
+                                    })?.length > 0 ?
                                         users.filter(item => {
-                                            return (item?.room.status === false && item.status === null) && item
+                                            return (item?.room?.status === false && item.status === null) && item
                                         })?.map((item, index) => <tr>
                                             <th scope="row">{++index}</th>
                                             <td>{item.room.title}</td>

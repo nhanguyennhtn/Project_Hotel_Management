@@ -21,6 +21,11 @@ const CreateCardVehicle = () => {
     const [qrValue, setQrValue] = useState('');
     const [cardVehicles, setCardVehicle] = useState([]);
 
+    const [searchTerm, setSearchTerm] = useState('');
+    const [sortOrder, setSortOrder] = useState('asc');
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
+
     useEffect(() => {
         fetchData();
     }, []);
@@ -126,6 +131,50 @@ const CreateCardVehicle = () => {
         }
     };
 
+    const setBan = async (item) => {
+        if (window.confirm(`Bạn muốn bảo trì thẻ ${item.ten_the}?`)) {
+            const ma_the = item._id
+            await axios.put(`http://localhost:3535/api/cardVehicles/update/${ma_the}`, { trangthai_the: 'Bảo trì' })
+        }
+        fetchData()
+    }
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+        setCurrentPage(1); // Reset to first page on new search
+    };
+    const filteredVehicles = cardVehicles
+        .filter((item) => item.ten_the.toLowerCase().includes(searchTerm.toLowerCase()))
+        .sort((a, b) => sortOrder === 'asc' ? a.ten_the.localeCompare(b.ten_the) : b.ten_the.localeCompare(a.ten_the));
+
+    const totalPages = Math.ceil(filteredVehicles.length / itemsPerPage);
+    const displayedVehicles = filteredVehicles.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
+    const renderPageNumbers = () => {
+        const pageNumbers = [];
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === currentPage || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                pageNumbers.push(
+                    <button key={i} onClick={() => handlePageChange(i)} className={i === currentPage ? "active p-2 btn" : "p-2 btn no-active"}>
+                        {i}
+                    </button>
+                );
+            } else if (i === 1 || i === totalPages) {
+                pageNumbers.push(
+                    <button className='p-2 btn' key={i} onClick={() => handlePageChange(i)}>
+                        {i}
+                    </button>
+                );
+            } else if (i === currentPage - 2 || i === currentPage + 2) {
+                pageNumbers.push(<span className='p-2' key={i}>...</span>);
+            }
+        }
+        return pageNumbers;
+    };
+
     return (
         <div className="row">
             <div className="admin-wrapper container-md mt-4">
@@ -134,7 +183,24 @@ const CreateCardVehicle = () => {
                         <h1 className="h4 ms-4">Danh sách thẻ xe</h1>
                     </div>
                 </div>
-                <button onClick={() => setShowAddForm(true)} className='btn btn-primary my-2 p-2 rounder-3'>Tạo thẻ xe</button>
+                <div className='d-flex'>
+                    <div className='col-6'>
+                        <button onClick={() => setShowAddForm(true)} className='btn btn-primary my-2 p-2 rounder-3'>Tạo thẻ xe</button>
+                    </div>
+                    <div className='col-6 d-flex gap-2'>
+                        <input
+                            type="text"
+                            placeholder="Tìm theo tên thẻ"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            className="form-control me-2 my-2 p-2 ms-auto"
+                            style={{width: 250}}
+                        />
+                        <button onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')} className="btn btn-secondary my-2 p-2 rounder-3">
+                            {sortOrder === 'asc' ? <i class="bi bi-sort-alpha-down-alt"></i> : <i class="bi bi-sort-alpha-down"></i>}
+                        </button>
+                    </div>
+                </div>
                 <table className='table table-bordered'>
                     <thead>
                         <tr>
@@ -142,26 +208,43 @@ const CreateCardVehicle = () => {
                             <th>Tên thẻ</th>
                             <th>nội dung </th>
                             <th>ảnh QR</th>
+                            <th>Trạng thái</th>
                             <th>ngày lập</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {cardVehicles?.map((item, index) => {
+                        {displayedVehicles?.map((item, index) => {
                             return (
                                 <tr key={index}>
-                                    <td>{++index}</td>
+                                    <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
                                     <td>{item.ten_the}</td>
                                     <td>{item.noidung_the}</td>
                                     <td >
-                                        <img src={item.anhQR_the} alt='anh QR'style={{ width: 'auto', height: '20%', marginTop: '10px'}}/>
+                                        <img src={item.anhQR_the} alt='anh QR' style={{ width: 'auto', height: '20%', marginTop: '10px' }} />
                                     </td>
+                                    <td>{item.trangthai_the}</td>
                                     <td>{item.ngaylap_the}</td>
+                                    <td>
+                                        <div className='d-flex gap-2'>
+                                            <button name='chặn' className="btn btn-outline-danger border-0 p-0 fs-5" onClick={() => { setBan(item) }}>
+                                                <i class="bi bi-ban"></i>
+                                            </button>
+                                            <button name='thông tin' className="btn btn-outline-secondary border-0 p-0 fs-5">
+                                                <i class="bi bi-info-circle"></i>
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                             )
                         })}
 
                     </tbody>
                 </table>
+                <div className="pagination">
+                    <button className="btn btn-primary rounder-3" onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>Trang trước</button>
+                    {renderPageNumbers()}
+                    <button className="btn btn-primary rounder-3" onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>Trang sau</button>
+                </div>
             </div>
             {showAddForm && (
                 <div className='modal' style={{ display: 'block', zIndex: 1100, overflowY: 'scroll' }}>

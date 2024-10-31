@@ -1,85 +1,58 @@
-import React, { useEffect, useState } from 'react'
-import Chart from 'react-apexcharts'
-import moment from 'moment'
-import AdminHeader from '../components/Header'
-import ContentMenu from '../components/ContentMenu'
-import { apiMotelsRead, apiUsersRead } from '../../../axios/axios'
-import { PieChart } from '@mui/x-charts/PieChart'
+import React, { useEffect, useState } from 'react';
+import Chart from 'react-apexcharts';
+import AdminHeader from '../components/Header';
+import ContentMenu from '../components/ContentMenu';
+import { apiMotelsRead } from '../../../axios/axios'
+import StatisticsPage from './managerVehicle';
+import axios from 'axios';
 
 export default function Statistic() {
-  const [chartData, setChartData] = useState({
-    options: {
-      chart: {
-        type: 'bar',
-      },
-      xaxis: {
-        categories: [],
-      },
-    },
-    series: [
-      {
-        name: 'Sales',
-        data: [],
-      },
-    ],
-  })
-
-  const [piechartData, setPieChartData] = useState([
-    { id: 1, value: 40, label: 'Phòng trống' },
-    { id: 2, value: 30, label: 'Đang đợi' },
-    { id: 3, value: 20, label: 'Đã đặt phòng' },
-  ])
+  const [data, setData] = useState({ available: 0, booked: 0, waitingbooking: 0 });
+  const [motels, setMotels] = useState([])
+  const [vehicleIns, setVehicleIn] = useState([])
+  const [showForm, setShowForm] = useState('Phòng trọ')
 
   useEffect(() => {
-    fetchData()
-  }, [])
+    fetchData();
+  }, []);
 
   const fetchData = async () => {
-    const startOfMonth = moment().startOf('month').format('YYYY-MM-DD')
-    const endOfMonth = moment().endOf('month').format('YYYY-MM-DD')
-
     try {
-      const usersResponse = await apiUsersRead()
-      const motelsResponse = await apiMotelsRead()
+      const motelsResponse = await apiMotelsRead();
+      const motels = motelsResponse?.motels || [];
+      const vehicleIn = await axios.get('http://localhost:3535/api/XeVao/read')
+      setVehicleIn(vehicleIn.data.vehicleIn)
+      setMotels(motels)
 
-      // Safeguard if usersResponse.user is undefined or null
-      const users = usersResponse?.user || []
-      const motels = motelsResponse?.motels || []
+      const waitingbooking = motels.filter(motel => motel.status === false).length;
+      const bookedCount = motels.filter(motel => motel.status === true).length;
+      const availableCount = motels.filter(motel => motel.status === undefined || motel.status === null).length;
 
-      // Updating chartData with users data
-      setChartData((prevChartData) => ({
-        ...prevChartData,
-        options: {
-          ...prevChartData.options,
-          xaxis: {
-            categories: users.map((item) => item?.room?.title || 'N/A'),  // Safeguard with 'N/A' if room title is undefined
-          },
-        },
-        series: [
-          {
-            ...prevChartData.series[0],
-            data: users.map((item) => item?.room?.price || 0),  // Safeguard with 0 if price is undefined
-          },
-        ],
-      }))
-
-      // Safeguard pie chart data with empty array if motels are not available
-      const pieLabels = motels.map((room) => (room?.status ? 'Đã đặt' : 'Phòng trống')) || []
-      const updatedPieData = pieLabels.reduce((acc, label) => {
-        const found = acc.find((item) => item.label === label)
-        if (found) {
-          found.value += 1
-        } else {
-          acc.push({ id: acc.length + 1, value: 1, label })
-        }
-        return acc
-      }, [])
-
-      setPieChartData(updatedPieData)
-    } catch (e) {
-      console.error('Error fetching data:', e)
+      setData({ available: availableCount, booked: bookedCount, waitingbooking });
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
-  }
+  };
+  
+  const NumVehicleIn = vehicleIns.filter((vehicleIn) => vehicleIn.trangthai === "Trong bãi")
+  const NumVehicleOut = vehicleIns.filter((vehicleOut) => vehicleOut.trangthai === "Rời bãi")
+
+  const barChartOptions = {
+    chart: {
+      id: 'bar-chart',
+      type: 'bar',
+    },
+    xaxis: {
+      categories: ['Phòng trống', 'Đã đặt', 'Đang đợi'],
+    },
+  };
+
+  const barChartSeries = [
+    {
+      name: 'Số lượng',
+      data: [data.available, data.booked, data.waitingbooking],
+    },
+  ];
 
   return (
     <div className='content-reponse'>
@@ -92,68 +65,50 @@ export default function Statistic() {
               <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 className="h4 ms-4">Danh sách đặt phòng</h1>
               </div>
-
               <div className='row pb-2'>
                 <div className='d-flex gap-2'>
-                  {/* Pie chart with dynamic data */}
                   <div className='card col'>
-                    <div className="container text-center">
-                      <PieChart
-                        series={[
-                          {
-                            data: piechartData,
-                            labelKey: 'label',
-                            valueKey: 'value',
-                          },
-                        ]}
-                        width={150}
-                        height={150}
-                      />
-                      <div className="legend mt-3">
-                        {piechartData?.map((item, index) => (
-                          <div key={index} className="d-flex align-items-center justify-content-center">
-                            <span className={`legend-color legend-color-${item.id} me-2`}></span>
-                            <span>{item.label}: {item.value}%</span>
-                          </div>
-                        ))}
+                    <div className="container ">
+                      <h5 className='text-center mt-2'>Tình trạng phòng</h5>
+                      <div className='d-flex flex-column pb-2'>
+                        <label className='ms-1 '><strong>Số lượng phòng: </strong> {motels.length}</label>
+                        <label className='ms-1 '><strong>Số phòng trống: </strong> {data.available}</label>
+                        <label className='ms-1 '><strong>Số phòng đã đặt: </strong> {data.booked}</label>
+                        <label className='ms-1 '><strong>Số phòng chờ duyệt: </strong> {data.waitingbooking}</label>
                       </div>
                     </div>
                   </div>
-
-                  {/* Other cards for statistics */}
                   <div className='card col'>
-                    <div className='col-4 gap-1 ms-2 p-0'>
-                      Phần trăm điện nước
-                    </div>
-                  </div>
-                  <div className='card col'>
-                    Tròn 3
+                    <h5 className='text-center mt-2'>Nhà xe</h5>
+                    <label className='ms-3'><strong>Tổng xe: </strong> {vehicleIns?.length || 0}</label>
+                    <label className='ms-3'><strong>Số xe trong bãi: </strong> {NumVehicleIn?.length || 0}</label>
+                    <label className='ms-3'><strong>Số xe rời bãi: </strong> {NumVehicleOut?.length || 0}</label>
                   </div>
                 </div>
               </div>
 
-              <div className='row'>
+              <div className='row border-bottom mb-2 pb-2'>
                 <div className='d-flex justify-content-evenly'>
                   <div className='card bg-primary col-3'>
-                    <label>Hotel</label>
-                  </div>
-                  <div className='card bg-info col-3'>
-                    <label>Customers</label>
+                    <button className={`btn rounder-3  border-0 text-dark ${showForm === 'Phòng trọ' ? 'active' : ''}`} onClick={() => setShowForm('Phòng trọ')}><label className='ms-2'><strong>Phòng trọ</strong></label></button>
                   </div>
                   <div className='card bg-danger col-3'>
-                    <label>Customers</label>
+                    <button className={`btn rounder-3 border-0 text-dark ${showForm === 'Nhà xe' ? 'active' : ''}`} onClick={() => setShowForm('Nhà xe')}><label className='ms-2'><strong>Nhà xe</strong></label></button>
                   </div>
                 </div>
               </div>
-
-              <div className='row'>
-                <label className='text-center fs-4 text-uppercase'>Thống kê điện nước theo tháng</label>
-                <Chart options={chartData?.options} series={chartData?.series} type="bar" height={350} />
-              </div>
+              {showForm === 'Phòng trọ' && (
+                <div className='row'>
+                  <label className='text-center fs-4 text-uppercase'>Thống kê doanh thu từng phòng/tháng</label>
+                  <Chart options={barChartOptions} series={barChartSeries} type="bar" height={350} />
+                </div>
+              )
+              }
+              {showForm === 'Nhà xe' && <StatisticsPage />}
             </main>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

@@ -8,7 +8,7 @@ import { image0 } from "../../assets/img/panner";
 
 export default function HomePage() {
     const [biensoND1, setBiensoND1] = useState('');
-    const [biensoND2, setBiensoND2] = useState('66-L1 580.07');
+    const [biensoND2, setBiensoND2] = useState('83-E1 286.46');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [result, setResult] = useState([]);
@@ -74,7 +74,7 @@ export default function HomePage() {
         if (capturing1) {
             const interval = setInterval(() => {
                 capture1();
-            }, 200);
+            }, 500);
             return () => clearInterval(interval);
         }
         fetchData()
@@ -84,7 +84,7 @@ export default function HomePage() {
         if (capturing2) {
             const interval = setInterval(() => {
                 capture2();
-            }, 200);
+            }, 500);
             return () => clearInterval(interval);
         }
         fetchData2()
@@ -104,16 +104,21 @@ export default function HomePage() {
     useEffect(() => { if (biensoND2) { setcamQROut(true) } }, [biensoND2])
 
     const [isCardVehicles, setIsCardVehicles] = useState([])
+    const [NVs, setNVs] = useState([])
+
     useEffect(() => {
         axios.get('http://localhost:3535/api/cardVehicles/read')
             .then((isCardVehicle) => {
                 setIsCardVehicles(isCardVehicle?.data.cardVehicle)
             })
+        axios.get('http://localhost:3535/api/users/read')
+        .then((user) => {
+            setNVs(user.data.user)
+        })
     }, [sothe])
-    const filterCard = Array.isArray(isCardVehicles) ? isCardVehicles.filter((item) => item.ma_the === sothe) : [];
-    console.log(filterCard);
-
-
+    const filterCard = Array.isArray(isCardVehicles) ? isCardVehicles.filter((item) => item.ma_the === sothe) : []
+    const filterNV = NVs.filter(nv => {return nv.username._id === sessionStorage.getItem('staffInfo')})
+    
     const fetchData = () => {
         axios.get(`http://localhost:3535/api/search_by_plate`, {
             params: { bienso_ND: biensoND1 },
@@ -146,14 +151,17 @@ export default function HomePage() {
             });
         await axios.get(`http://localhost:3535/api/XeVao/${biensoND2}`)
             .then(response => {
-                setResult1({ ...result1, ...response.data.vehicleIn });
+                if (response.data.vehicleIn.trangthai === "Trong bãi"){
+                    setResult1({ ...result1, ...response.data.vehicleIn });
+                } else {
+                    setResult1({})
+                }
             })
             .catch(error => {
                 console.error("Lỗi trong quá trình xử lý", error);
                 setResult1(null);
             });
     }
-    console.log(result1);
 
     const check_BXS1 = () => {
         if (!models1) {
@@ -188,7 +196,7 @@ export default function HomePage() {
         const imageSrc = webcamRef1?.current?.getScreenshot();
         setImageSrc1(imageSrc);
         if (models1) {
-            axios.post('https://80e4-35-233-238-28.ngrok-free.app/api/webcam-model', { image: imageSrc })
+            axios.post('https://8d9f-34-143-254-110.ngrok-free.app/api/webcam-model', { image: imageSrc })
                 .then(response => {
                     const { yl_result, image_base64, yl_result_sort } = response.data;
                     if (yl_result && yl_result !== '') {
@@ -202,6 +210,7 @@ export default function HomePage() {
                 });
         }
     }, [webcamRef1]);
+
 
     useEffect(() => {
         if (!camQR) {
@@ -220,7 +229,7 @@ export default function HomePage() {
     const capture2 = useCallback(() => {
         const imageSrc = webcamRef2?.current?.getScreenshot();
         setImageSrc2(imageSrc);
-        axios.post('https://80e4-35-233-238-28.ngrok-free.app/api/webcam-model', { image: imageSrc })
+        axios.post('https://8d9f-34-143-254-110.ngrok-free.app/api/webcam-model', { image: imageSrc })
             .then(response => {
                 const { yl_result, image_base64, yl_result_sort } = response.data;
                 if (models2) {
@@ -235,7 +244,7 @@ export default function HomePage() {
                 console.error("There was an error processing the image!", error);
             });
     }, [webcamRef2]);
-    
+
 
     const handleSubmit_XV = async (event) => {
         event.preventDefault();
@@ -248,9 +257,11 @@ export default function HomePage() {
             alert('Số thẻ không được để trống!');
             return;
         }
+        
 
         const response = await axios.get('http://localhost:3535/api/XeVao/read');
         const vehiclesInLot = response.data.vehicleIn?.filter(vehicle => vehicle.trangthai === "Trong bãi");
+        // const cardFilter = response.data.vehicleIn?.filter(cardInLot => cardInLot?.ma_the.sothe === sothe && cardInLot?.ma_the.trangthai_the === "Đang dùng")
 
         const duplicateVehicle = vehiclesInLot.find(vehicle => vehicle.biensoxe_XV === biensoND1);
         if (duplicateVehicle) {
@@ -271,22 +282,27 @@ export default function HomePage() {
         };
         // setCapturing1(true);
         if (!filterCard?.map((item) => item.ma_the).includes(sothe)) {
+            setBiensoND1('')
+            setCapturing1(true)
+            setcamQR(false)
             alert('Thẻ không tồn tại')
-            return;
+            return fetchData();
         }
         await axios.post('http://localhost:3535/api/XeVao/create', newxeVao)
-        await axios.put(`http://localhost:3535/api/cardVehicles/update/${result?.idthexe}`, { trangthai_the: 'Đang dùng' });
+        const ma_the = result?.idthexe ? result?.idthexe : filterCard[0]?._id
+        await axios.put(`http://localhost:3535/api/cardVehicles/update/${ma_the}`, { trangthai_the: 'Đang dùng' });
         setSuccess('Xevao đã được thêm');
         setImageSrc1('');
         setBiensoND1('');
         setIsCardVehicles('');
         setcamQR(false);
+        setCapturing1(true)
         setSothe('');
         setResult([]);
         setModels1(true);
 
     };
-
+    
     const handleSubmit_XR = (event) => {
         event.preventDefault();
         const newxeRa = {
@@ -297,15 +313,16 @@ export default function HomePage() {
             thoigian_XR: result0?.thoigian,
             giatien: giatien?.GiaTienTong,
 
-            ma_NV: sessionStorage.getItem('userInfo'),
+            ma_NV: filterNV[0]?._id || null,
             ma_XV: result1?._id,
         };
         try {
             if (sothe_XR === result1?.ma_the.ma_the) {
-                console.log(newxeRa);
-                const res = axios.post('http://localhost:3535/api/xera/create', newxeRa);
-                if (res) {
-                    axios.delete(`http://localhost:3535/api/xevao/${biensoND2}`);
+                const xevao = axios.put(`http://localhost:3535/api/XeVao/${biensoND2}`, {trangthai: 'Rời bãi'});
+                const ma_the = result1?.ma_the._id
+                const thexe = axios.put(`http://localhost:3535/api/cardVehicles/update/${ma_the}`, {trangthai_the: 'Hoạt động'});
+                if (xevao && thexe ) {
+                    axios.post('http://localhost:3535/api/Xera/create', newxeRa);
                     console.log('Xera added successfully');
                     setCapturing2(true)
                     setImgResult2('')
@@ -341,10 +358,9 @@ export default function HomePage() {
                 });
         }
     }, [biensoND2]);
-    
-    
+
+
     const total = (giatien?.GiaTienTong) ? (Intl.NumberFormat('vi-vn').format(giatien?.GiaTienTong) + ' VNĐ') : ''
-    console.log(total);
 
     return (
         <div>
@@ -633,18 +649,18 @@ export default function HomePage() {
                                                             <>
                                                                 {sothe_XR !== result1?.ma_the?.ma_the ?
                                                                     <div>
-                                                                        <input value={sothe_XR} readOnly className='d-block' />
+                                                                        <input value={sothe_XR} className='d-block' />
                                                                         <span className="text-danger "><i class="bi bi-exclamation-diamond-fill text-danger"></i> QR và thẻ xe không khớp</span>
                                                                     </div>
                                                                     :
                                                                     <div>
-                                                                        <input value={sothe_XR} readOnly />
+                                                                        <input value={sothe_XR} />
                                                                         <span className="text-success"><i class="bi bi-check-circle text-success"></i> Xin mời xe ra</span>
                                                                     </div>
                                                                 }
                                                             </>
                                                             :
-                                                            <div><input value={sothe_XR} readOnly className='d-block' /></div>
+                                                            <div><input value={sothe_XR} className='d-block' /></div>
                                                         }
 
                                                     </div>

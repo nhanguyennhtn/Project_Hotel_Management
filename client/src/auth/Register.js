@@ -31,7 +31,8 @@ export default function Register() {
         try {
             const res = await apiAccountRegister({
                 ...data,
-                name: `${lastName} ${firstName}`
+                name: `${lastName} ${firstName}`,
+                password: pass
             })
             if (res && res.status === true) {
                 setMessage(res.message)

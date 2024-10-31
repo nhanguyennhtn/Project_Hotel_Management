@@ -245,7 +245,7 @@ function Rooms() {
                             <div className=' mt-4 '>
                                 <div className='card shadow-sm'>
                                     <div className='d-flex p-2'>
-                                        <img src={image7} className='img rounded-0 rounded-circle avatar '></img>
+                                        <img src={image7} className='img rounded-0 rounded-circle avatar ' alt=''></img>
                                         <p className='mx-3 mt-2 fw-bold fs-5'>Nhã Nguyễn<i class="bi bi-check-circle mx-4 "></i></p>
                                     </div>
                                     <label className='text-right mx-3'>Liên hệ trực tiếp</label>

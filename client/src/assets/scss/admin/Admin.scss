@@ -57,4 +57,15 @@
             cursor: pointer;
         }
     }
+    .snowReactQill{
+        .ql-container {
+            height: 100px !important; /* Tăng chiều cao tổng thể */
+          }
+          
+          .ql-editor {
+            min-height: 50px; /* Đặt chiều cao tối thiểu cho vùng chỉnh sửa */
+            max-height: 200px; /* Đặt chiều cao tối đa nếu cần */
+            overflow-y: auto;  /* Thêm scroll nếu nội dung quá dài */
+          }
+    }
 }

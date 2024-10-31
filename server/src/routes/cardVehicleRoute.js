@@ -8,7 +8,7 @@ const route = (app) => {
     router.post('/create', controller.create)
     router.get('/read', controller.read)
     router.get('/read/:id', controller.readOne)
-    router.put('/update/:id', controller.update)
+    router.put('/update/:ma_the', controller.update)
     router.delete('/delete/:id', controller.delete)
 
     return app.use('/api/cardVehicles', router)

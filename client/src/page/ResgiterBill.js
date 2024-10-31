@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import FileBase64 from 'react-file-base64'
-import { useLocation } from 'react-router-dom'
-import { apiMotelsUpdate, apiUsersCreate, apiUsersRead, apiUsersUpdate } from '../axios/axios'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { apiMotelsUpdate, apiUsersRead, apiUsersUpdate } from '../axios/axios'
 import '../assets/scss/home/RoomDetail.scss'
 import { image4 } from '../assets/img/panner'
 import { useForm } from 'react-hook-form'
@@ -22,6 +22,7 @@ export default function RegisterBill() {
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [selectedDateEnd, setSelectedDateEnd] = useState(new Date())
     const [licenseDate, setLicenseDate] = useState()
+    const navigate = useNavigate()
 
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     const today = new Date();
@@ -32,13 +33,16 @@ export default function RegisterBill() {
         fetchData()
     }, [])
 
-    const fetchData = async () => {
+    const cus = customers?.filter((item) => item.username._id === accountinfo._id)
+    const fetchData = useCallback(async () => {
         const res = await apiUsersRead()
         setCustomers(res.user)
-    }
-    const cus = customers?.filter((item) => item.username._id === accountinfo._id)
-console.log(cus);
-
+        if (cus[0]?.username === accountinfo._id) {
+            if(window.confirm('Bạn cần cập nhật thông tin trước!')){
+                return navigate('/user/profile')
+            }
+        }
+    },[])
     const handleBooking = async (data, e) => {
         e.preventDefault()
         const startDate = selectedDate.toLocaleDateString("vi-VN", options)
@@ -89,7 +93,7 @@ console.log(cus);
         return <div class="mb-3">
             <label for="licenseDate" class="form-label">Ngày cấp</label>
             <DatePicker required selected={cus[0]?.licenseDate} className='mx-2 '
-                onChange={(date) => setLicenseDate(date)} dateFormat="dd/MM/yyyy" placeholderText='Chọn ngày Cấp' />
+                onChange={() => setLicenseDate(cus[0]?.licenseDate)} dateFormat="dd/MM/yyyy" placeholderText='Chọn ngày Cấp' />
             <label for="licenseAddress" class="form-label">Nơi cấp</label>
             <input required  value={cus[0]?.licenseAddress}
                 type="text" class="mx-2 ps-3" id="licenseAddress" placeholder='Nhập nơi cấp' />
@@ -115,7 +119,7 @@ console.log(cus);
             <div className='bg-white news-wrapper'>
                 <div className='card container-sm'>
                     <div class="text-center wow fadeInUp pt-4" data-wow-delay="0.1s">
-                        <h6 class="section-title text-center text-primary text-uppercase"></h6>
+                        {/* <h6 class="section-title text-center text-primary text-uppercase"></h6> */}
                         <h1 class="mb-5">Đăng ký đặt <span class="text-primary text-uppercase">Phòng</span></h1>
                     </div>
                     <div className='row '>

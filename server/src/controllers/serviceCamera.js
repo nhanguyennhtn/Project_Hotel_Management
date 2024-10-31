@@ -6,6 +6,7 @@ const CardVehicle = require('../models/cardVehicle')
 const moment = require('moment')
 const CostList = require('../models/costList')
 const VehicleIn = require('../models/VehicleIn')
+const VehicleOut = require('../models/VehicleOut')
 
 const serviceCamera = {
     search_by_plate: async (req, res) => {
@@ -163,20 +164,20 @@ const serviceCamera = {
                 freedem = parseInt(latestBangGia.quadem);
             }
             const bienso_xe = req.query.bienso_ND;
-            
+
             if (!bienso_xe) {
                 return res.status(400).json({ error: 'Biển số xe không được để trống' });
             }
             const currentTime = moment().format('YYYY-MM-DD HH:mm:ss');
             const currentDate = moment();
-            
-            const xevao = await VehicleIn.findOne({ biensoxe_XV: bienso_xe }).sort({ thoigian_XV: -1 });
-            
+
+            const xevao = await VehicleIn.findOne({ biensoxe_XV: bienso_xe, trangthai: "Trong bãi" }).sort({ thoigian_XV: -1 });
+
             let thoigian_XV = xevao ? moment(xevao.thoigian_XV).format('YYYY-MM-DD HH:mm:ss') : null;
             let delta_day2s = xevao ? currentDate.diff(moment(xevao.thoigian_XV), 'days') : null;
-            
+
             let gia_xe = (currentDate.hour() >= 6 && currentDate.hour() < 19) ? freengay : freedem;
-            
+
             if (delta_day2s === 0) {
                 delta_day2s += 1;
             }
@@ -222,7 +223,89 @@ const serviceCamera = {
         } catch {
 
         }
+    },
+    get_chart_data: async (req, res) => {
+        const { month, year, start_date, end_date } = req.query
+
+        const query = {}
+
+        if (month && year) {
+            const startOfMonth = moment(`${year}-${month}-01`, 'YYYY-MM-DD').startOf('month').toDate();
+            const endOfMonth = moment(`${year}-${month}-01`, 'YYYY-MM-DD').endOf('month').toDate();
+            query.thoigian_XR = { $gte: moment(startOfMonth).format('YYYY-MM-DD HH:mm:ss'), $lte: moment(endOfMonth).format('YYYY-MM-DD HH:mm:ss') };
+        } else if (start_date && end_date) {
+            try {
+                const startDate = moment(start_date, 'YYYY-MM-DD HH:mm:ss').startOf('day').toDate(); // Định dạng giống trong MongoDB
+                const endDate = moment(end_date, 'YYYY-MM-DD HH:mm:ss').endOf('day').toDate();
+
+                if (startDate.getTime() === endDate.getTime()) {
+                    query.thoigian_XR = { $gte: moment(startDate).format('YYYY-MM-DD HH:mm:ss'), $lte: moment(startDate).format('YYYY-MM-DD HH:mm:ss') };
+                } else {
+                    query.thoigian_XR = { $gte: moment(startDate).format('YYYY-MM-DD HH:mm:ss'), $lte: moment(endDate).format('YYYY-MM-DD HH:mm:ss') };
+                }
+            } catch (error) {
+                return res.status(400).json({ error: 'Invalid date format' });
+            }
+        } else {
+            // Default to filtering by the current day
+            const startOfToday = moment().startOf('day').format('YYYY-MM-DD HH:mm:ss');
+            const endOfToday = moment().endOf('day').format('YYYY-MM-DD HH:mm:ss');
+            query.thoigian_XR = {
+                $gte: moment(startOfToday).format('YYYY-MM-DD HH:mm:ss'),
+                $lte: moment(endOfToday).format('YYYY-MM-DD HH:mm:ss')
+            };
+        }
+        try {
+            console.log(query);
+
+            const XeRa = await VehicleOut.find(query).populate('ma_XV')
+            // console.log(XeRa);
+
+            const data = {
+                chutro: {
+                    count: 0,
+                    total_money: 0,
+                    details: []
+                },
+                khachtro: {
+                    count: 0,
+                    total_money: 0,
+                    details: []
+                },
+                khach: {
+                    count: 0,
+                    total_money: 0,
+                    details: []
+                }
+
+            }
+
+            XeRa.forEach(entry => {
+                const giatien = parseFloat(entry.giatien) || 0;
+                const entryObj = entry.toObject();
+
+                if (entry.chucvu === 'chutro') { // Replace with actual field checking logic for Sinhvien
+                    data.chutro.count += 1;
+                    data.chutro.total_money += giatien;
+                    data.chutro.details.push(entryObj);
+                } else if (entry.chucvu === 'khachtro') { // Replace with actual field checking logic for Congchuc
+                    data.khachtro.count += 1;
+                    data.khachtro.total_money += giatien;
+                    data.khachtro.details.push(entryObj);
+                } else {
+                    data.khach.count += 1;
+                    data.khach.total_money += giatien;
+                    data.khach.details.push(entryObj);
+                }
+            });
+
+            res.json(data);
+
+        } catch {
+
+        }
     }
+
 
 }
 

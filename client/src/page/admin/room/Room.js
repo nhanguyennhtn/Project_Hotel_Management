@@ -32,7 +32,8 @@ export default function Admin() {
     const createRef = useRef()
 
     useEffect(() => {
-        fetchData()
+        fetchData();
+        fetchDataUser()
     }, [statusFilter, currentPage])
 
     const fetchData = async () => {
@@ -45,15 +46,12 @@ export default function Admin() {
                 if (statusFilter === 'false') return motel?.status === false
                 return motel.status === null || motel.status === undefined
             })
-            
+
             setFilteredMotels(filtered)
         } catch (e) {
             console.log(e)
         }
     }
-    useEffect(() => {
-        fetchDataUser()
-    }, [filteredUsers])
 
     const fetchDataUser = async () => {
         const result = await apiUsersRead()
@@ -116,6 +114,7 @@ export default function Admin() {
         setCurrentForm('')
         setShowEditForm(false)
         setShowInfoItem(false)
+        setShowAddForm(false)
         setMessage('')
         reset()
         setImage('')
@@ -162,7 +161,7 @@ export default function Admin() {
                                                 <div className="mb-3">
                                                     <label htmlFor="descCreate" className="form-label">Mô tả</label>
                                                     <p>
-                                                        <ReactQuill theme='snow' value={value} onChange={setValue} /></p>
+                                                        <ReactQuill theme='snow' value={value} onChange={setValue} className='snowReactQill' /></p>
                                                     {/* <textarea required {...registerCreate('desc')} className="form-control" id="descCreate" rows="3" placeholder='Description'></textarea> */}
                                                 </div>
                                                 <div className="mb-3">
@@ -232,7 +231,7 @@ export default function Admin() {
                                                     <button className="btn btn-outline-secondary border-0 p-0 m-0" onClick={() => { setShowInfoItem(true); setCurrentForm(item); setFilerRoomByUser(item) }}><i class="bi bi-info-circle "></i></button>
                                                 </div>
                                             </td>
-                                            <td>
+                                            {/* <td>
                                                 {
                                                     item.status ?
                                                         <button className='btn btn-outline-secondary border-0 ' disabled><i class="bi bi-hand-index"></i></button>
@@ -240,7 +239,7 @@ export default function Admin() {
                                                         <button className='btn btn-outline-primary border-0 ' onClick={() => { setShowAddForm(true); setValueAddForm(item) }} ><i class="bi bi-hand-index"></i></button>
 
                                                 }
-                                            </td>
+                                            </td> */}
                                         </tr>
                                     ) :
                                         <tr>
@@ -319,6 +318,30 @@ export default function Admin() {
                                 </div>
                             </div>
                         )}
+                        {/* {showAddForm && (
+                            <div className='modal' style={{ display: 'table-cell', zIndex: 1100, overflowY: 'scoll' }}>
+                                <div className='modal-dialog modal-dialog-centered modal-xl'>
+                                    <div className='modal-content'>
+                                        <div className='modal-header'>
+                                            <h5 className='modal-title'>Đăng ký phòng</h5>
+                                            <button type="button" className="btn-close" onClick={handleCloseModal}></button>
+                                        </div>
+                                        acc - phòng - hợp đồng
+                                        <div className='modal-body'>
+                                            <div className='d-flex gap-2'>
+                                                <div className='ms-2'>
+                                                    <label>Tên đăng nhập</label>
+                                                    <input />
+                                                    <label>Mật khẩu</label>
+                                                    <input />
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )} */}
                     </main>
 
                 </div>

@@ -142,7 +142,7 @@ export default function CustomerRegister() {
                             <th>Họ và tên</th>
                             <th>Mã thẻ</th>
                             <th>Ngày đăng ký</th>
-                            <th>ngày kết thúc</th>
+                            <th>Số tháng gia hạn</th>
                             <th>Biển số xe</th>
                             <th></th>
                         </tr>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import '../../assets/scss/template/dashboard.scss'
 import ContentMenu from './components/ContentMenu'
 import AdminHeader from './components/Header'
@@ -54,6 +54,7 @@ export default function Admin() {
             setSuccessMessage('Hủy thành công')
         }
     }
+
     return (
         <div className='wrapper'>
             <AdminHeader />
@@ -134,7 +135,9 @@ export default function Admin() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {customers?.length > 0 && customers.filter(item => {
+                                    {customers.filter(item => {
+                                        return (item?.room?.status === false && item?.status === null) && item
+                                    }).length > 0 ? customers.filter(item => {
                                         return (item?.room?.status === false && item?.status === null) && item
                                     })?.map((item, index) => <tr>
                                         <th scope="row">{++index}</th>
@@ -157,7 +160,8 @@ export default function Admin() {
                                                 <button onClick={() => handleCancel(item)} className='btn btn-outline-danger ms-3'>Hủy bỏ</button>
                                             </div>
                                         }</td>
-                                    </tr>)
+                                    </tr>) :
+                                        <tr colSpan='8' className='text-center'>Không có dữ liệu</tr>
                                     }
                                 </tbody>
                             </table>

@@ -5,14 +5,20 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.bubble.css'
 
 export default function EditForm({ currentForm, setShowEditForm, onSubmit, message, setMessage }) {
-    const { register, handleSubmit, reset } = useForm('')
+    const { register, handleSubmit, reset, setValue: setFormValue, getValues } = useForm('')  // Lấy getValues để truy xuất giá trị
     const [image, setImage] = useState('')
     const [value, setValue] = useState('')
 
     useEffect(() => {
-        setValue(currentForm?.desc || '')
+        setValue(currentForm?.desc || value)
         setImage(currentForm?.image || '')
-    }, [currentForm])
+        setFormValue('title', currentForm?.title)  // Đặt giá trị ban đầu của các trường
+        setFormValue('area', currentForm?.area)
+        setFormValue('size', currentForm?.size)
+        setFormValue('kind', currentForm?.kind)
+        setFormValue('price', currentForm?.price)
+        setFormValue('desc', currentForm?.desc)
+    }, [currentForm, setFormValue])
 
     const handleCloseModal = () => {
         setShowEditForm(false)
@@ -21,13 +27,28 @@ export default function EditForm({ currentForm, setShowEditForm, onSubmit, messa
         setImage('')
         setValue('')
     }
+
+    const handleQuillChange = (content) => {
+        setValue(content)
+        setFormValue('desc', content)  
+    }
+
+    const handleFormSubmit = (data) => {
+        const updatedFormData = {
+            ...data,
+            desc: getValues('desc'),  
+            image: image || currentForm.image,
+        }
+        onSubmit(updatedFormData)
+    }
+
     return (
         <div className='modal' style={{ display: 'table-cell', zIndex: 1100, overflowY: 'scroll' }}>
             <div className='modal-dialog modal-dialog-center'>
                 <div className='modal-content'>
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form onSubmit={handleSubmit(handleFormSubmit)}>  
                         <div className='modal-header'>
-                            <h5 className="modal-title" >Cập nhật - {currentForm?.title}</h5>
+                            <h5 className="modal-title">Cập nhật - {currentForm?.title}</h5>
                             <button type="button" className="btn-close" onClick={handleCloseModal}></button>
                         </div>
                         <div className="modal-body">
@@ -37,7 +58,7 @@ export default function EditForm({ currentForm, setShowEditForm, onSubmit, messa
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="descCreate" className="form-label">Mô tả</label>
-                                <ReactQuill theme='bubble' defaultValue={currentForm.desc} onChange={(content) => setValue(content)} />
+                                <ReactQuill theme='snow' value={value} onChange={handleQuillChange} />  {/* Cập nhật value và onChange */}
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="areaCreate" className="form-label">Khu vực</label>
@@ -49,11 +70,10 @@ export default function EditForm({ currentForm, setShowEditForm, onSubmit, messa
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="kindCreate" className="form-label">Loại phòng</label>
-                                <select required className="form-control" id="kindCreate " defaultValue={currentForm?.kind} {...register('kind', { required: true })}>
-                                    <option value='Phòng đơn' >Phòng đơn</option>
+                                <select required className="form-control" id="kindCreate" defaultValue={currentForm?.kind} {...register('kind', { required: true })}>
+                                    <option value='Phòng đơn'>Phòng đơn</option>
                                     <option value='Phòng ghép'>Phòng ghép</option>
                                 </select>
-                                {/* <input required defaultValue={currentForm?.kind} {...register('kind', { required: true })} type="text" className="form-control" id="priceCreate" placeholder="Price" /> */}
                             </div>
                             <div className="mb-3">
                                 <label htmlFor="priceCreate" className="form-label">Giá phòng</label>
@@ -81,7 +101,6 @@ export default function EditForm({ currentForm, setShowEditForm, onSubmit, messa
                         <span>{message}</span>
                     </form>
                 </div>
-
             </div>
         </div>
     )

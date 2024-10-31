@@ -5,6 +5,8 @@ import CustomerRegister from './customerRegister'
 import ListStaff from './listStaff'
 import InfoVehicle from './infoVehicle'
 import CardVehicle from './cardVehicle'
+import ListVehicleIn from './listCardIn'
+import HistoryVehicle from './historyVehicle'
 
 export default function Camera() {
   const [activeComponent, setActiveComponent] = useState(null)
@@ -30,10 +32,10 @@ export default function Camera() {
                     Nhân viên bãi xe
                   </div>
                   <div className={`card p-2 my-2 btn-primary px-3 rounded-3 btn ${activeComponent === 'cusRegister' ? 'active' : ''}`} onClick={() => { handleClick('cusRegister') }}>
-                    khách đăng ký
+                    Khách đăng ký
                   </div>
                   <div className={`card p-2 my-2 btn-primary px-3 rounded-3 btn ${activeComponent === 'infoVehicle' ? 'active' : ''}`} onClick={() => { handleClick('infoVehicle') }}>
-                    thông tin xe
+                    Thông tin xe
                   </div>
                   <div className={`card p-2 my-2 btn-primary px-3 rounded-3 btn ${activeComponent === 'historyVehicle' ? 'active' : ''}`} onClick={() => { handleClick('historyVehicle') }}>
                     Lịch sử xe (ra/vào)
@@ -51,6 +53,8 @@ export default function Camera() {
                 {activeComponent === 'cusRegister' && <CustomerRegister />}
                 {activeComponent === 'infoVehicle' && <InfoVehicle />}
                 {activeComponent === 'cardVehicle' && <CardVehicle />}
+                {activeComponent === 'currentVehicle' && <ListVehicleIn />}
+                {activeComponent === 'historyVehicle' && <HistoryVehicle />}
               </div>
             </main>
           </div>

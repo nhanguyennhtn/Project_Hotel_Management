@@ -10,7 +10,7 @@ const route = (app) => {
     router.put('/update/:id', controller.update)
     router.delete('/delete/:id', controller.delete)
 
-    return app.use('/api/VehicleIns', router)
+    return app.use('/api/XeRa', router)
 }
 
 module.exports = route

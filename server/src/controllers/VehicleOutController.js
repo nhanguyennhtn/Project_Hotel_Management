@@ -3,7 +3,7 @@ const models = require('../models/VehicleOut')
 const vehicleOut = {
     create: function (req, res, next) {
         models.create(req.body)
-            .then(vehicleOut => res.json({ vehicleOut }))
+            .then(vehicleOut => res.status(200).json({ vehicleOut }))
             .catch(next)
     },
     read: function (req, res, next) {

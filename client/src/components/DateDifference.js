@@ -29,7 +29,11 @@ const DateDifference = ({ dateStart, dateEnd }) => {
 
             const timeDiff = endDate - currentDate;
             const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-            setDaysDiff(daysDiff);
+            if (daysDiff <= 0) {
+                setDaysDiff(0);
+            } else {
+                setDaysDiff(daysDiff);
+            }
 
             if (daysDiff <= 0) {
                 setStatus("Đã hết hạn");
@@ -42,13 +46,13 @@ const DateDifference = ({ dateStart, dateEnd }) => {
     }, [dateStart, dateEnd]);
 
     return (
-        <div>
+        <div className="d-flex gap-2">
             {daysDiff !== null ? (
-                <p>{daysDiff} Ngày</p>
+                <p>{daysDiff} ngày</p>
             ) : (
                 <p>Đang tính toán...</p>
             )}
-            {status && <p>{status}</p>}
+            {status && status === 'Sắp hết hạn' ? <p className="text-warning">{status}</p> : <p className="text-danger">{status}</p>}
         </div>
     );
 };
