@@ -18,7 +18,7 @@ const vehicleIn = {
     readOne: function (req, res, next) {
         const { biensoND2 } = req.params
 
-        models.findOne({ biensoxe_XV: biensoND2 })
+        models.findOne({ biensoxe_XV: biensoND2, trangthai: "Trong bãi" })
             .populate('ma_DKX')
             .populate('ma_the')
             .populate('ma_BX')

@@ -25,11 +25,11 @@ export default function ContentMenu() {
                             <i class="bi bi-people-fill"></i> Khách hàng
                         </Link>
                     </li>
-                    <li class="nav-item">
+                    {/* <li class="nav-item">
                         <Link class="nav-link" to="/admin/contact">
                             <i class="bi bi-person-lines-fill"></i> Liên hệ
                         </Link>
-                    </li>
+                    </li> */}
 
                     <li class="nav-item">
                         <Link class="nav-link" to="/admin/bill">

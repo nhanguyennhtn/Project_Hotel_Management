@@ -79,7 +79,7 @@ export default function Customers() {
                                 </thead>
                                 <tbody>
                                     {users?.filter((item) => {
-                                        return item.username.role !== 2 && item.username.role !== 1 && item
+                                        return item.username.role !== 2 && item.username.role !== 1 && item.status !== null
                                     }).map((item, index) => {
                                         return (
                                             <tr key={item._id}>

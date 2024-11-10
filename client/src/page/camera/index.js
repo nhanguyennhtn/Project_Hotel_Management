@@ -8,7 +8,7 @@ import { image0 } from "../../assets/img/panner";
 
 export default function HomePage() {
     const [biensoND1, setBiensoND1] = useState('');
-    const [biensoND2, setBiensoND2] = useState('83-E1 286.46');
+    const [biensoND2, setBiensoND2] = useState('');
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
     const [result, setResult] = useState([]);
@@ -27,13 +27,13 @@ export default function HomePage() {
     const [imgResult1, setImgResult1] = useState('');
     const [imgResult2, setImgResult2] = useState('');
 
-    const [capturing1, setCapturing1] = useState(false);
-    const [capturing2, setCapturing2] = useState(false);
+    const [capturing1, setCapturing1] = useState(true);
+    const [capturing2, setCapturing2] = useState(true);
     const [models1, setModels1] = useState(true);
     const [models2, setModels2] = useState(true);
 
     const [camQR, setcamQR] = useState(false);
-    const [camQROut, setcamQROut] = useState(true);
+    const [camQROut, setcamQROut] = useState(false);
 
     const result_BXS1 = useRef([]);
     const result_BXS2 = useRef([]);
@@ -196,10 +196,10 @@ export default function HomePage() {
         const imageSrc = webcamRef1?.current?.getScreenshot();
         setImageSrc1(imageSrc);
         if (models1) {
-            axios.post('https://8d9f-34-143-254-110.ngrok-free.app/api/webcam-model', { image: imageSrc })
+            axios.post('https://fc4a-34-125-144-214.ngrok-free.app/api/webcam-model', { image: imageSrc })
                 .then(response => {
                     const { yl_result, image_base64, yl_result_sort } = response.data;
-                    if (yl_result && yl_result !== '') {
+                    if (yl_result && yl_result !== '' && yl_result_sort.length > 5) {
                         result_BXS1.current.push(yl_result_sort);
                         check_BXS1();
                     }
@@ -229,7 +229,7 @@ export default function HomePage() {
     const capture2 = useCallback(() => {
         const imageSrc = webcamRef2?.current?.getScreenshot();
         setImageSrc2(imageSrc);
-        axios.post('https://8d9f-34-143-254-110.ngrok-free.app/api/webcam-model', { image: imageSrc })
+        axios.post('https://fc4a-34-125-144-214.ngrok-free.app/api/webcam-model', { image: imageSrc })
             .then(response => {
                 const { yl_result, image_base64, yl_result_sort } = response.data;
                 if (models2) {
@@ -463,7 +463,7 @@ export default function HomePage() {
                                                     <QRCodeScanner
                                                         setSothe={setSothe}
                                                         active={camQR}
-                                                        videoConstraints={{ deviceId: device3 }}
+                                                        videoConstraints={{ deviceId: device1 }}
                                                     />
                                                 </> :
                                                 ''
@@ -639,7 +639,7 @@ export default function HomePage() {
                                                                 <QRCodeScanner
                                                                     setSothe={setSothe_XR}
                                                                     active={camQROut}
-                                                                    videoConstraints={{ deviceId: device2, facingMode: "environment" }}
+                                                                    videoConstraints={{ deviceId: device1, facingMode: "environment" }}
                                                                 />
                                                             </div>
                                                             :

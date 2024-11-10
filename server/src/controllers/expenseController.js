@@ -22,8 +22,8 @@ const expenseController = {
             .catch(next)
     },
     delete: (req, res, next) => {
-        model.deleteOne({ _id: req.params.id })
-            .then(expense => res.json({ expense }))
+        model.updateOne({ _id: req.params.id }, {status: null})
+            .then(() => res.json({ message: 'Đã chuyển về null' }))
             .catch(next)
     }
 }

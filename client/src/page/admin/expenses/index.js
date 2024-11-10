@@ -84,7 +84,7 @@ export default function Admin() {
                             <div className='btn-toolbar mb-2 mx-4 '>
                                 <div class="btn-group me-2 gap-2 ">
                                     <Link to={'/admin/costOfElects'} class="btn btn-sm btn-outline-secondary">Bảng giá </Link>
-                                    <Link to={'/admin/expense/export'} class="btn btn-sm btn-outline-secondary"><i class="bi bi-reply-all-fill"></i> Export  </Link>
+                                    {/* <Link to={'/admin/expense/export'} class="btn btn-sm btn-outline-secondary"><i class="bi bi-reply-all-fill"></i> Export  </Link> */}
 
                                 </div>
                             </div>

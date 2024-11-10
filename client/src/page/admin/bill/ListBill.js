@@ -29,9 +29,8 @@ export default function ListBill() {
     const userActive = (data) => {
         try {
             return contracts?.filter((item) => {
-                return item.room._id === data && item.status == true
+                return item.room._id === data && item.status === true
             })?.map((item, index) => {
-                console.log(item.user.fullname, index);
                 return item.user.fullname
             })
         } catch (e) {

@@ -171,8 +171,10 @@ const serviceCamera = {
             const currentTime = moment().format('YYYY-MM-DD HH:mm:ss');
             const currentDate = moment();
 
-            const xevao = await VehicleIn.findOne({ biensoxe_XV: bienso_xe, trangthai: "Trong bãi" }).sort({ thoigian_XV: -1 });
-
+            const xevao = await VehicleIn.findOne({ biensoxe_XV: bienso_xe, trangthai: "Trong bãi"}).sort({ thoigian_XV: -1 });
+            
+            
+            
             let thoigian_XV = xevao ? moment(xevao.thoigian_XV).format('YYYY-MM-DD HH:mm:ss') : null;
             let delta_day2s = xevao ? currentDate.diff(moment(xevao.thoigian_XV), 'days') : null;
 
