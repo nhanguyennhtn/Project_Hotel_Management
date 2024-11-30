@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom'
 import ReactQuill from 'react-quill'
 
 // import Rooms from '../components/Rooms'
-export default function     HomePage() {
+export default function HomePage() {
     const [motels, setMotels] = useState([])
     const [search, setSearch] = useState('')
 
@@ -51,7 +51,7 @@ export default function     HomePage() {
                             <div id="header-carousel" class="carousel slide" data-bs-ride="carousel">
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                        <img class="w-100" src={image0} alt="Image" />
+                                        <img class="w-100" src={image0} alt="anhtro0" />
                                         <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                             <div class="p-3" >
                                                 <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown">Trải nghiệm</h6>
@@ -60,7 +60,7 @@ export default function     HomePage() {
                                         </div>
                                     </div>
                                     <div class="carousel-item">
-                                        <img class="w-100 opacyti-img" src={image1} alt="Image" />
+                                        <img class="w-100 opacyti-img" src={image1} alt="anhtro1" />
                                         <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                             <div class="p-3" >
                                                 <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown">Trải nghiệm</h6>
@@ -69,7 +69,7 @@ export default function     HomePage() {
                                         </div>
                                     </div>
                                     <div class="carousel-item">
-                                        <img class="w-100 opacyti-img" src={image2} alt="Image" />
+                                        <img class="w-100 opacyti-img" src={image2} alt="anhtro2" />
                                         <div class="carousel-caption d-flex flex-column align-items-center justify-content-center">
                                             <div class="p-3" >
                                                 <h6 class="section-title text-white text-uppercase mb-3 animated slideInDown">Trải nghiệm</h6>
@@ -98,7 +98,7 @@ export default function     HomePage() {
                                         <h1 class="mb-5">Thông tin <span class="text-primary text-uppercase">các phòng</span></h1>
                                     </div>
                                     <div class="row g-4">
-                                        {itemToShow.filter((item) => {
+                                        {itemToShow?.filter((item) => {
                                             return search.toLowerCase() === '' ? item : item.price.toLowerCase().includes(search)
                                         }).map((item, index) => (
                                             <div key={index} class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">

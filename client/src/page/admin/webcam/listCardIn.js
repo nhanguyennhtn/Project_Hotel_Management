@@ -120,7 +120,7 @@ export default function ListVehicleIn() {
                                     <td><img src={item.anh_XV} style={{ maxWidth: 200 + 'px',height: 'auto' }} alt="ảnh xe vào" /></td>
                                     <td><img src={`data:image/jpeg;base64,${item.anhBS_XV}`} style={{ width: 200 + 'px', height: 'auto' }} alt="ảnh biển số xe vào" /></td>
                                     <td>{item.thoigian_XV}</td>
-                                    <td>{item.chucvu_XV}</td>
+                                    <td>{item.ma_DKX.user.fullname ? item.ma_DKX.user.fullname: item.chucvu_XV}</td>
                                 </tr>
                             );
                         }) :

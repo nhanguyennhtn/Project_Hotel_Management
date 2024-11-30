@@ -23,7 +23,7 @@ export default function UserContract() {
     console.log(contracts);
     
 
-    const handleSuccess = async (item) => {
+    const   handleSuccess = async (item) => {
         try {
             if (window.confirm('Xác nhận ký kết hợp đồng?')) {
                 const res = await apiContractsUpdate({ item, _id: item._id, status: true, date: ngay })
@@ -41,7 +41,7 @@ export default function UserContract() {
 
     }
     const handleCheckIn = (data) => {
-        if (data.status == true) {
+        if (data.status === true) {
             return <button className=" btn border-primary ml-auto my-3 disabled" onClick={() => handleExport(data)}> Đã Xác nhận</button>
         } else if (data.status === null) {
             return <button className='btn btn-outline-success mb-4 mx-auto' onClick={() => handleSuccess(data)}>Xác nhận ký kết </button>

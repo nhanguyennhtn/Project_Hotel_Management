@@ -337,19 +337,11 @@ export default function CustomerDetail() {
                                                     <button onClick={toggleVisibility} className="text-primary mx-2">Đã kết thúc</button>
                                                 }
                                             </div>
-                                            <div className=" d-flex mt-3">
-                                                <label>Gói trả trước:</label>
-                                                <p className="mx-2">{customer.costPackage}</p>
-                                            </div>
                                         </div>
                                         <div className="col-5">
                                             <div className=" d-flex ">
                                                 <label>Giá: </label>
                                                 <p className="mx-2">{Intl.NumberFormat('vi-VN').format(customer.room.price)}vnđ</p>
-                                            </div>
-                                            <div className=" d-flex ">
-                                                <label>Tiền cọc phòng:</label>
-                                                <p className="mx-2">{customer.rentalDeposit}</p>
                                             </div>
                                         </div>
                                     </div>

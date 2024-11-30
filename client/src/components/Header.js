@@ -14,8 +14,8 @@ export default function Header() {
     const fetchData = async () => {
         const res = await apiUsersRead()
         const motel = await apiMotelsRead()
-        setCustomers(res.user)
-        setRooms(motel.motels)
+        setCustomers(res?.user)
+        setRooms(motel?.motels)
     }
     const handleLogout = () => {
         if (window.confirm('are you sure?')) {
@@ -29,25 +29,30 @@ export default function Header() {
             return item?.username._id === JSON.parse(window.sessionStorage.getItem('userInfo'))._id && item?.status === null
         })
         if (window.confirm('phí cọc sẽ không thể hoàn trả')) {
-            await apiMotelsUpdate({ _id: check[0].room._id, status: null })
-            await apiUsersDelete(check[0]._id)
+            await apiMotelsUpdate({ _id: check[0]?.room?._id, status: null })
+            // await apiUsersDelete(check[0]?._id)
             fetchData()
         }
     }
     const checked = () => {
         const check = customers?.filter((item) => {
-            return item?.username._id === JSON.parse(window.sessionStorage.getItem('userInfo'))._id && item?.status === null
+            return item?.username?._id === JSON.parse(window.sessionStorage.getItem('userInfo'))?._id && item?.status === null
         })
-        if (check.length > 0) {
+        if (check?.length > 0 ) {
             return <div class="dropdown rounded-2">
                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                     Phòng đặt
                 </button>
                 <ul class="dropdown-menu w-auto" aria-labelledby="dropdownMenuButton1">
-                    {check.map((item) => item.room?.title)}
-                    <p>(Đang chờ phản hồi)</p>
+                    {check?.map((item) => {
+                        if (item?.room?.status === false) {
+                            return <p className='ms-2'>{item?.room?.title} <br />(Đang chờ phản hồi)</p>
+                        } else if (item?.room?.status === true){
+                            return <p>{item.room?.title} <br /> (Có phản hồi cần xác nhận)</p>
+                        }
+                    })}
                     <li><hr class="dropdown-divider m-0 pb-0" /></li>
-                    <li><button className='btn btn-primary w-100 rounded-3' onClick={() => handleCancel} >Hủy</button></li>
+                    <li><button className='btn btn-primary w-100 rounded-3' onClick={() => handleCancel()} >Hủy</button></li>
                 </ul>
             </div>
         }
@@ -55,12 +60,12 @@ export default function Header() {
 
     const checkCustomer = () => {
         const res = customers?.filter((item) => {
-            return item.username._id === JSON.parse(window.sessionStorage.getItem('userInfo'))._id && item.status === true
+            return item?.username?._id === JSON.parse(window.sessionStorage.getItem('userInfo'))._id && item.status === true && item?.room?.kind === 'Phòng ghép'
         })
         if (res.length > 0) {
             Nagative('/news/create')
         } else {
-            alert('Bạn hiện chưa có phòng !!!')
+            alert('Bạn hiện chưa có phòng hoặc loại phòng đơn !!!')
         }
 
         // (customers.filter((item) => {

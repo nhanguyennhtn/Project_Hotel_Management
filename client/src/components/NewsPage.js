@@ -24,7 +24,7 @@ export default function NewsPage() {
     };
 
     const filterUser = (item) => {
-        const user = users.find((user) => user._id === item?.user._id);
+        const user = users?.find((user) => user._id === item?.user._id);
         if (user) {
             return {
                 username: user.username.username,

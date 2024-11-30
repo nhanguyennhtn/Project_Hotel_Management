@@ -1,3 +1,4 @@
+const { populate } = require('../models/registerVehicle')
 const models = require('../models/VehicleIn')
 const { update, readOne } = require('./cardVehicleController')
 
@@ -9,7 +10,12 @@ const vehicleIn = {
     },
     read: function (req, res, next) {
         models.find()
-            .populate('ma_DKX')
+            .populate({
+                path: 'ma_DKX',
+                populate:{
+                    path: 'user'
+                }
+            })
             .populate('ma_the')
             .populate('ma_BX')
             .then(vehicleIn => res.status(200).json({ vehicleIn }))

@@ -117,7 +117,7 @@ export default function HistoryVehicle() {
                                     <td><img src={`data:image/jpeg;base64,${item.anhBS_XR}`} style={{ width: 200 + 'px', height: 'auto' }} alt="ảnh biển số xe vào" /></td>
                                     <td>{item.ma_XV.thoigian_XV}</td>
                                     <td>{item.thoigian_XR}</td>
-                                    <td>{item.chucvu}</td>
+                                    <td>{item.ma_XV?.ma_DKX?.user?.fullname ? item.ma_XV?.ma_DKX?.user?.fullname : item.chucvu}</td>
                                     <td>{Intl.NumberFormat('vi-VN').format(item.giatien)} VNĐ</td>
                                 </tr>
                             );

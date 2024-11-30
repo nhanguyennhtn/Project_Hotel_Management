@@ -19,9 +19,9 @@ export default function Reponse() {
     }
     const handleConfirm = async (item) => {
         if (window.confirm('Xác nhận đặt phòng sẽ tiến hành tạo hợp đồng?')) {
-            // await apiMotelsUpdate({
-            //     _id: item.room._id, status: true
-            // })
+            await apiMotelsUpdate({
+                _id: item.room._id, status: true
+            })
             fetchData()
         }
     }

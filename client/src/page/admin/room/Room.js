@@ -34,7 +34,7 @@ export default function Admin() {
     useEffect(() => {
         fetchData();
         fetchDataUser()
-    }, [statusFilter, currentPage])
+    }, [statusFilter, currentPage, statusFilter])
 
     const fetchData = async () => {
         try {

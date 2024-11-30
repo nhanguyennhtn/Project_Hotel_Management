@@ -174,7 +174,6 @@ const serviceCamera = {
             const xevao = await VehicleIn.findOne({ biensoxe_XV: bienso_xe, trangthai: "Trong bãi"}).sort({ thoigian_XV: -1 });
             
             
-            
             let thoigian_XV = xevao ? moment(xevao.thoigian_XV).format('YYYY-MM-DD HH:mm:ss') : null;
             let delta_day2s = xevao ? currentDate.diff(moment(xevao.thoigian_XV), 'days') : null;
 
@@ -184,38 +183,41 @@ const serviceCamera = {
                 delta_day2s += 1;
             }
             const TTX = await infoVehicle.findOne({ biensoxe_TTX: bienso_xe })
+            // xevao.ma_the === nguoidung.mathe
             if (TTX) {
                 const nguoidung = await registerVehicle.findOne({ ma_TTX: TTX._id })
-                const sothang_kt = parseInt(nguoidung.ngayketthuc);
-                const ngaydangky = moment(nguoidung.ngaydangky);
-                const ngayketthuc = ngaydangky.clone().add(sothang_kt, 'months');
+                if (nguoidung.ma_the === xevao.ma_the) {
+                    const sothang_kt = parseInt(nguoidung.ngayketthuc);
+                    const ngaydangky = moment(nguoidung.ngaydangky);
+                    const ngayketthuc = ngaydangky.clone().add(sothang_kt, 'months');
 
-                const delta_days = ngayketthuc.diff(currentDate, 'days');
-                let warning_message = null;
-
-                if (delta_days < 7 && delta_days > 0) {
-                    warning_message = 'Sắp hết hạn';
-                } else if (delta_days === 0) {
-                    warning_message = 'Đã hết hạn';
+                    const delta_days = ngayketthuc.diff(currentDate, 'days');
+                    let warning_message = null;
+    
+                    if (delta_days < 7 && delta_days > 0) {
+                        warning_message = 'Sắp hết hạn';
+                    } else if (delta_days === 0) {
+                        warning_message = 'Đã hết hạn';
+                    }
+    
+                    if (delta_days > 0) {
+                        gia_xe = 0;
+                    }
+                    return res.json({
+                        chucvu: 'khachtro',
+                        biensoxe: TTX.biensoxe_TTX,
+                        thoigian: currentTime,
+                        NgayXeVao: thoigian_XV,
+                        sotien: gia_xe,
+                        DayGive: delta_day2s,
+                        GiaTienTong: delta_day2s * gia_xe,
+                        thoiGianDK: ngaydangky.format('YYYY-MM-DD'),
+                        Sothang: sothang_kt,
+                        ngayketthuchopdong: ngayketthuc.format('YYYY-MM-DD'),
+                        dochenhlech: delta_days,
+                        warning_message
+                    });
                 }
-
-                if (delta_days > 0) {
-                    gia_xe = 0;
-                }
-                return res.json({
-                    chucvu: 'khachtro',
-                    biensoxe: TTX.biensoxe_TTX,
-                    thoigian: currentTime,
-                    NgayXeVao: thoigian_XV,
-                    sotien: gia_xe,
-                    DayGive: delta_day2s,
-                    GiaTienTong: delta_day2s * gia_xe,
-                    thoiGianDK: ngaydangky.format('YYYY-MM-DD'),
-                    Sothang: sothang_kt,
-                    ngayketthuchopdong: ngayketthuc.format('YYYY-MM-DD'),
-                    dochenhlech: delta_days,
-                    warning_message
-                });
             }
             return res.json({
                 chucvu: 'khach',

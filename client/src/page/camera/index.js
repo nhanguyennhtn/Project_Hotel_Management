@@ -196,7 +196,7 @@ export default function HomePage() {
         const imageSrc = webcamRef1?.current?.getScreenshot();
         setImageSrc1(imageSrc);
         if (models1) {
-            axios.post('https://fc4a-34-125-144-214.ngrok-free.app/api/webcam-model', { image: imageSrc })
+            axios.post('https://e201-34-125-20-203.ngrok-free.app/api/webcam-model', { image: imageSrc })
                 .then(response => {
                     const { yl_result, image_base64, yl_result_sort } = response.data;
                     if (yl_result && yl_result !== '' && yl_result_sort.length > 5) {
@@ -229,11 +229,11 @@ export default function HomePage() {
     const capture2 = useCallback(() => {
         const imageSrc = webcamRef2?.current?.getScreenshot();
         setImageSrc2(imageSrc);
-        axios.post('https://fc4a-34-125-144-214.ngrok-free.app/api/webcam-model', { image: imageSrc })
+        axios.post('https://e201-34-125-20-203.ngrok-free.app/api/webcam-model', { image: imageSrc })
             .then(response => {
                 const { yl_result, image_base64, yl_result_sort } = response.data;
                 if (models2) {
-                    if (yl_result && yl_result !== '') {
+                    if (yl_result && yl_result !== '' && yl_result_sort.length > 5) {
                         result_BXS2.current.push(yl_result_sort);
                         check_BXS2();
                     }
@@ -258,7 +258,6 @@ export default function HomePage() {
             return;
         }
         
-
         const response = await axios.get('http://localhost:3535/api/XeVao/read');
         const vehiclesInLot = response.data.vehicleIn?.filter(vehicle => vehicle.trangthai === "Trong bãi");
         // const cardFilter = response.data.vehicleIn?.filter(cardInLot => cardInLot?.ma_the.sothe === sothe && cardInLot?.ma_the.trangthai_the === "Đang dùng")
